@@ -1,0 +1,6 @@
+# Data files
+cleaned_sampled_data.csv
+*.zip
+
+# Plots and figures
+plots/
