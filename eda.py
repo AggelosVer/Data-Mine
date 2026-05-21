@@ -9,9 +9,8 @@ from sklearn.model_selection import train_test_split
 # Reconfigure stdout to use UTF-8 for Greek Windows console
 sys.stdout.reconfigure(encoding='utf-8')
 
-# Paths
-dataset_dir = r"C:\Users\user\.cache\kagglehub\datasets\chethuhn\network-intrusion-dataset\versions\1"
-output_dir = r"C:\Users\user\Documents\GitHub\Data Mine"
+output_dir = os.path.dirname(os.path.abspath(__file__))
+dataset_dir = output_dir
 plots_dir = os.path.join(output_dir, "plots")
 os.makedirs(plots_dir, exist_ok=True)
 
@@ -99,7 +98,7 @@ def stratified_sample(df, target_col, sample_size=100000, min_samples=25, random
     
     return pd.concat([rare_df, sampled_remaining], ignore_index=True)
 
-sample_df = stratified_sample(full_df, 'Label', sample_size=100000, random_state=42)
+sample_df = stratified_sample(full_df, 'Label', sample_size=100000, min_samples=50, random_state=42)
 print(f"Μέγεθος δείγματος: {sample_df.shape}")
 
 print("\n=== Βήμα 3: Ανάλυση Μεταβλητής Στόχου (Label) ===")
@@ -238,7 +237,7 @@ with open(report_path, "w", encoding="utf-8") as rf:
     
     rf.write("### 1.3 Στρατηγική Δειγματοληψίας\n")
     rf.write("Για την αποφυγή υπολογιστικών προβλημάτων κατά την εκπαίδευση μοντέλων και κυρίως κατά την εκτέλεση της Ιεραρχικής Ομαδοποίησης (Hierarchical Clustering) στο Ερώτημα 3 (η οποία απαιτεί τετραγωνική μνήμη $O(N^2)$), δημιουργήθηκε ένα **στρωματοποιημένο τυχαίο δείγμα 100.000 εγγραφών**.\n")
-    rf.write("Για να μην χαθούν οι εξαιρετικά σπάνιες κλάσεις επιθέσεων (π.χ. `Heartbleed` με 11 δείγματα, `Infiltration` με 36 δείγματα), εφαρμόστηκε μια τεχνική όπου οι κλάσεις με λιγότερα από 25 δείγματα διατηρήθηκαν αυτούσιες στο δείγμα, ενώ οι υπόλοιπες κλάσεις υποστηρίχθηκαν με στρωματοποιημένη τυχαία δειγματοληψία.\n\n")
+    rf.write("Για να μην χαθούν οι εξαιρετικά σπάνιες κλάσεις επιθέσεων (π.χ. `Heartbleed` με 7 δείγματα, `Infiltration` με 35 δείγματα), εφαρμόστηκε μια τεχνική όπου οι κλάσεις με λιγότερα από 50 δείγματα διατηρήθηκαν αυτούσιες στο δείγμα, ενώ οι υπόλοιπες κλάσεις υποστηρίχθηκαν με στρωματοποιημένη τυχαία δειγματοληψία.\n\n")
 
     rf.write("## 2. Ανάλυση Μεταβλητής Στόχου (Label) & Ανισορροπία Κλάσεων\n\n")
     rf.write("Η στήλη `Label` ορίζει την κλάση της κίνησης. Παρατηρείται **ακραία ανισορροπία κλάσεων** (class imbalance), η οποία είναι τυπικό χαρακτηριστικό των δεδομένων κυβερνοασφάλειας, καθώς η συντριπτική πλειονότητα της κίνησης είναι κανονική (`BENIGN`).\n\n")
