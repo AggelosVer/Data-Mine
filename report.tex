@@ -1,0 +1,676 @@
+\documentclass[11pt,a4paper]{article}
+
+% --- Πακέτα και Ρυθμίσεις Γλώσσας ---
+\usepackage[utf8]{inputenc}
+\usepackage[greek,english]{babel}
+\usepackage{alphabeta} % Επιτρέπει ελληνικούς χαρακτήρες απευθείας και σε μαθηματικά
+\usepackage{amsmath,amssymb,amsfonts} % Μαθηματικά σύμβολα
+
+% --- Ορισμός Μακροεντολής για Αγγλικό Κείμενο ---
+% Αποτρέπει τη μετατροπή των λατινικών χαρακτήρων σε ελληνικούς λόγω του babel-greek
+\newcommand{\eng}[1]{\textlatin{#1}}
+
+% --- Γεωμετρία Σελίδας & Στυλ ---
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{microtype}
+\usepackage{titlesec}
+\usepackage{parskip} % Διαστήματα μεταξύ παραγράφων χωρίς εσοχή
+\usepackage{multicol} % Για λίστες με πολλές στήλες
+
+% --- Πίνακες & Σχήματα ---
+\usepackage{booktabs} % Για επαγγελματικούς πίνακες υψηλής αισθητικής
+\usepackage{tabularx}
+\usepackage{longtable} % Για πίνακες που εκτείνονται σε πολλές σελίδες
+\usepackage{graphicx}
+\usepackage{float} % Για σταθεροποίηση εικόνων με [H]
+\usepackage{subcaption}
+
+% --- Χρώματα & Διακοσμητικά Στοιχεία ---
+\usepackage{xcolor}
+\definecolor{darkgray}{RGB}{40, 40, 40}
+\definecolor{lightgray}{RGB}{245, 247, 250}
+
+% --- Πλαίσια & Highlight ---
+\usepackage[many]{tcolorbox}
+\newtcolorbox{infobox}[1][]{
+  colback=lightgray,
+  colframe=darkgray,
+  width=\textwidth,
+  arc=1.5mm,
+  outer arc=1.5mm,
+  title=#1,
+  coltitle=white,
+  fonttitle=\bfseries,
+  attach boxed title to top left={xshift=4mm, yshift=-3mm},
+  boxed title style={colback=darkgray},
+  left=4mm, right=4mm, top=5mm, bottom=4mm,
+  boxrule=1pt
+}
+
+% --- Κώδικας ---
+\usepackage{listings}
+\lstset{
+  language=Python,
+  backgroundcolor=\color{lightgray},
+  basicstyle=\ttfamily\small,
+  keywordstyle=\bfseries\color{black},
+  commentstyle=\color{gray}\itshape,
+  stringstyle=\color{darkgray},
+  showstringspaces=false,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=8pt,
+  frame=single,
+  rulecolor=\color{lightgray!80!black},
+  breaklines=true,
+  breakatwhitespace=true,
+  captionpos=b
+}
+
+% --- Ρυθμίσεις Συνδέσμων ---
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=black,      
+    urlcolor=black,
+    citecolor=black,
+    pdftitle={Εξόρυξη Δεδομένων - Εργαστηριακή Άσκηση 2025-2026},
+    pdfpagemode=FullScreen,
+}
+
+% --- Ρυθμίσεις Επικεφαλίδων (Μαύρο/Μονοχρωματικό Στυλ) ---
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+% --- Ρυθμίσεις fancyhdr (Headers & Footers) ---
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{gray}Εξόρυξη Δεδομένων \& Αλγόριθμοι Μάθησης}
+\fancyhead[R]{\small\color{gray}Πανεπιστήμιο Πατρών}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% --- Αρχή Εγγράφου ---
+\begin{document}
+
+\selectlanguage{greek}
+
+% ==========================================
+%   ΕΞΩΦΥΛΛΟ (TITLE PAGE)
+% ==========================================
+\begin{titlepage}
+    \centering
+    \vspace*{1cm}
+    
+    \includegraphics[width=0.3\textwidth]{upatras_logo.png} \par % Αν έχετε το logo, αλλιώς σχολιάστε το
+    \vspace{0.8cm}
+    
+    {\large\bfseries ΠΑΝΕΠΙΣΤΗΜΙΟ ΠΑΤΡΩΝ}\\[0.2cm]
+    {\large ΤΜΗΜΑ ΜΗΧΑΝΙΚΩΝ ΗΛΕΚΤΡΟΝΙΚΩΝ ΥΠΟΛΟΓΙΣΤΩΝ \& ΠΛΗΡΟΦΟΡΙΚΗΣ}\\[0.2cm]
+    {\large ΕΡΓΑΣΤΗΡΙΟ ΣΥΣΤΗΜΑΤΩΝ ΥΠΟΛΟΓΙΣΤΩΝ \& ΕΦΑΡΜΟΓΩΝ}
+    
+    \vspace{2.5cm}
+    
+    \rule{\linewidth}{1.5pt} \\[0.4cm]
+    {\LARGE\bfseries Ανάλυση Δικτυακής Κίνησης και Ανίχνευση Κυβερνοεπιθέσεων με Τεχνικές Εξόρυξης Δεδομένων} \\[0.2cm]
+    {\large\bfseries Εργαστηριακή Άσκηση -- Εαρινό Εξάμηνο 2025-2026}
+    \rule{\linewidth}{1.5pt} \\
+    
+    \vspace{2.5cm}
+    
+    \noindent
+    \begin{minipage}{0.5\textwidth}
+        \begin{flushleft} \large
+            \emph{Διδάσκοντες:}\\
+            Καθ. \textbf{Β. Μεγαλοοικονόμου}\\
+            Αναπλ. Καθ. \textbf{Χ. Μακρής}
+        \end{flushleft}
+    \end{minipage}
+    \begin{minipage}{0.45\textwidth}
+        \begin{flushright} \large
+            \emph{Φοιτητές:}\\
+            \textbf{[Όνομα Φοιτητή 1]} (Α.Μ. [...])\\
+            \textbf{[Όνομα Φοιτητή 2]} (Α.Μ. [...]) % Αν είναι ατομική, σβήστε τη γραμμή
+        \end{flushright}
+    \end{minipage}
+    
+    \vfill
+    
+    {\large Πάτρα, \today}
+\end{titlepage}
+
+\newpage
+
+% ==========================================
+%   ΠΙΝΑΚΑΣ ΠΕΡΙΕΧΟΜΕΝΩΝ
+% ==========================================
+\tableofcontents
+\newpage
+
+% ==========================================
+%   ΕΙΣΑΓΩΓΗ & ΠΕΡΙΒΑΛΛΟΝ ΥΛΟΠΟΙΗΣΗΣ
+% ==========================================
+\section{Εισαγωγή \& Περιβάλλον Υλοποίησης}
+
+\subsection{Σύντομη Περιγραφή της Άσκησης}
+Σκοπός της παρούσας εργαστηριακής άσκησης είναι η ανάλυση δικτυακής κίνησης και η ανάπτυξη μοντέλων μηχανικής μάθησης για την ανίχνευση κυβερνοεπιθέσεων (\textbf{\eng{Intrusion Detection Systems - IDS}}). Χρησιμοποιώντας το αναγνωρισμένο σύνολο δεδομένων \textbf{\eng{CIC-IDS-2017}}, εφαρμόζουμε τεχνικές \textbf{\eng{Exploratory Data Analysis (EDA)}}, \textbf{\eng{Feature Selection}}, \textbf{\eng{Classification}} και \textbf{\eng{Clustering}}.
+
+Μέσω αυτής της διαδικασίας επιχειρείται η σύγκριση επιβλεπόμενων μοντέλων (\textbf{\eng{Logistic Regression}}, \textbf{\eng{Decision Trees}}, \textbf{\eng{Random Forest}}) με βελτιστοποίηση υπερπαραμέτρων (\textbf{\eng{Grid Search}} με και χωρίς \textbf{\eng{Cross-Validation}}), καθώς και μη επιβλεπόμενων αλγορίθμων (\textbf{\eng{K-Means}}, \textbf{\eng{Hierarchical Clustering}}, \textbf{\eng{DBSCAN}}) για την εύρεση κρυφών δομών στα δεδομένα.
+
+\subsection{Περιβάλλον Υλοποίησης \& Βιβλιοθήκες}
+Η υλοποίηση της άσκησης πραγματοποιήθηκε εξ ολοκλήρου στη γλώσσα προγραμματισμού \textbf{\eng{Python}} (έκδοση \texttt{\eng{3.10+}}). Οι βιβλιοθήκες που χρησιμοποιήθηκαν για την ανάλυση και την ανάπτυξη των μοντέλων είναι οι εξής:
+
+\begin{itemize}
+    \item \textbf{\eng{Pandas (v2.x):}} Για τη φόρτωση, συγχώνευση, καθαρισμό και διαχείριση των δεδομένων.
+    \item \textbf{\eng{NumPy (v1.x):}} Για αποδοτικές μαθηματικές πράξεις και διαχείριση πινάκων, \textbf{\eng{NaN}} και \textbf{\eng{Infinite}} τιμών.
+    \item \textbf{\eng{Scikit-Learn (v1.x):}} Για τον διαχωρισμό δεδομένων (\textbf{\eng{train/test split}}), την επιλογή χαρακτηριστικών, την κανονικοποίηση και την εκπαίδευση των αλγορίθμων μηχανικής μάθησης.
+    \item \textbf{\eng{Matplotlib \& Seaborn:}} Για τη δημιουργία των απαραίτητων γραφημάτων (\textbf{\eng{boxplots}}, \textbf{\eng{heatmaps}}, \textbf{\eng{barplots}}).
+\end{itemize}
+
+\subsection{Οδηγίες Εγκατάστασης \& Εκτέλεσης}
+Για την αναπαραγωγή των αποτελεσμάτων, προτείνεται η δημιουργία ενός \textbf{\eng{virtual environment}} και η εγκατάσταση των απαραίτητων πακέτων μέσω \textbf{\eng{pip}}.
+
+\begin{infobox}[Οδηγίες \eng{Setup} (\eng{Terminal})]
+\begin{enumerate}
+    \item \textbf{Δημιουργία \eng{Virtual Environment}:}
+    \begin{verbatim}
+    python -m venv venv
+    source venv/bin/activate  # Για Linux/macOS
+    .\venv\Scripts\activate   # Για Windows
+    \end{verbatim}
+    \item \textbf{Εγκατάσταση των Βιβλιοθηκών:}
+    \begin{verbatim}
+    pip install pandas numpy scikit-learn matplotlib seaborn
+    \end{verbatim}
+    \item \textbf{Εκτέλεση του Κώδικα:}
+    \begin{verbatim}
+    python eda.py
+    \end{verbatim}
+\end{enumerate}
+\end{infobox}
+
+\newpage
+
+% ==========================================
+%   ΕΡΩΤΗΜΑ 1
+% ==========================================
+\section{Ερώτημα 1 -- \eng{Exploratory Data Analysis (EDA)} \& \eng{Feature Selection}}
+
+\subsection{Δομή και Καθαρισμός του \eng{Dataset}}
+
+\subsubsection{Αρχική Δομή}
+Το αρχικό σύνολο δεδομένων \textbf{\eng{CIC-IDS-2017}} αποτελείται από 8 ξεχωριστά αρχεία \textbf{\eng{CSV}} (ένα για κάθε ημέρα/σενάριο προσομοίωσης). 
+\begin{itemize}
+    \item \textbf{Αρχικός αριθμός γραμμών (συνολικά):} $2.830.743$
+    \item \textbf{Αρχικός αριθμός στηλών:} $79$ (78 χαρακτηριστικά και 1 μεταβλητή-στόχος \texttt{\eng{Label}}).
+    \item \textbf{Τύποι Δεδομένων:} Οι στήλες είναι αριθμητικές (\texttt{\eng{int64}} και \texttt{\eng{float64}}), εκτός από τη στήλη \texttt{\eng{Label}} που είναι κατηγορική (\texttt{\eng{object}}).
+\end{itemize}
+
+\subsubsection{Διαδικασία Καθαρισμού Δεδομένων}
+Τα δεδομένα δικτύου από \textbf{\eng{pcap}} αρχεία περιέχουν συχνά θόρυβο ή σφάλματα καταγραφής. Για την εξασφάλιση της ποιότητας των δεδομένων εκπαίδευσης, ακολουθήθηκε η εξής διαδικασία καθαρισμού:
+\begin{enumerate}
+    \item \textbf{Αφαίρεση Κενών στα Ονόματα των Στηλών:} Πολλές στήλες περιείχαν αρχικά ή τελικά κενά (\textbf{\eng{whitespace}}) (π.χ. \texttt{'\eng{Flow Bytes/s}'}), τα οποία διορθώθηκαν με τη μέθοδο \texttt{\eng{strip()}} για την αποφυγή σφαλμάτων αναφοράς.
+    \item \textbf{Διαχείριση Ελλιπών (\eng{NaN}) και Άπειρων (\eng{Infinite}) Τιμών:} 
+    Οι στήλες \texttt{\eng{Flow Bytes/s}} και \texttt{\eng{Flow Packets/s}} εμφάνιζαν μη έγκυρες τιμές (\texttt{\eng{NaN}} και \texttt{\eng{Inf}}) σε περιπτώσεις όπου η διάρκεια ροής (\texttt{\eng{Flow Duration}}) ήταν μηδενική. Εφόσον οι προβληματικές εγγραφές αποτελούσαν λιγότερο από το \textbf{0.15\%} του συνολικού όγκου, αφαιρέθηκαν εξ ολοκλήρου (\texttt{\eng{drop()}}).
+    \item \textbf{Αφαίρεση Αρνητικών Τιμών:} Σε ορισμένα αριθμητικά χαρακτηριστικά που εκ φύσεως πρέπει να είναι θετικά (όπως \texttt{\eng{Flow Duration}}, \texttt{\eng{Flow Bytes/s}}, \texttt{\eng{Flow Packets/s}}, \texttt{\eng{IAT Mean}} κ.λπ.), εντοπίστηκαν ελάχιστες αρνητικές τιμές (θόρυβος/σφάλμα του εργαλείου εξαγωγής χαρακτηριστικών). Αυτές οι εγγραφές φιλτράρονται και αφαιρούνται.
+    \item \textbf{Αφαίρεση Διπλότυπων Εγγραφών:}
+    Εντοπίστηκαν και αφαιρέθηκαν συνολικά \textbf{312.825} διπλότυπες γραμμές (περίπου \textbf{11.05\%} των αρχικών δεδομένων). Η αφαίρεση αυτή είναι κρίσιμη, καθώς οι πανομοιότυπες εγγραφές δι\-κτυ\-α\-κής κίνησης μπορούν να προ\-κα\-λέ\-σουν \textbf{\eng{overfitting}} των μοντέλων τα\-ξι\-νό\-μη\-σης, κάνοντάς τα να απο\-μνη\-μο\-νεύ\-ουν συγκεκριμένες ροές αντί να γενικεύουν.
+\end{enumerate}
+
+Μετά την ολοκλήρωση του καθαρισμού, ο \textbf{τελικός αριθμός έγκυρων γραμμών} στο \eng{dataset} διαμορφώθηκε σε \textbf{2.517.918}.
+
+\subsubsection{Στρατηγική Δειγματοληψίας (\eng{Sampling Strategy})}
+Λόγω του τεράστιου όγκου δεδομένων ($>2.5$ εκ. γραμμές) και των υψηλών υπολογιστικών απαιτήσεων των αλγορίθμων ομαδοποίησης (κυρίως του \textbf{\eng{Hierarchical Clustering}} του Ερωτήματος 3, ο οποίος έχει τετραγωνική υπολογιστική πολυπλοκότητα $O(N^2)$ ως προς τη μνήμη), κρίθηκε απαραίτητη η δημιουργία ενός αντιπροσωπευτικού δείγματος \textbf{100.000 εγγραφών}.
+
+Για την αποφυγή απώλειας πληροφορίας, εφαρμόστηκε μια \textbf{\eng{Stratified Sampling}} στρατηγική:
+\begin{itemize}
+    \item Οι εξαιρετικά σπάνιες κλάσεις κυβερνοεπιθέσεων με λιγότερα από 50 δείγματα στο αρχικό σύνολο (π.χ. \texttt{\eng{Heartbleed}} με 7 δείγματα, \texttt{\eng{Infiltration}} με 35 δείγματα) \textbf{διατηρήθηκαν αυτούσιες στο δείγμα} χωρίς καμία περικοπή.
+    \item Για τις υπόλοιπες κλάσεις, εφαρμόστηκε στρωματοποιημένη τυχαία δειγματοληψία με διατήρηση των ακριβών ποσοστών εμφάνισής τους, εξασφαλίζοντας ότι η κατανομή των κλάσεων στο δείγμα είναι πανομοιότυπη με αυτή του πλήρους καθαρού συνόλου δεδομένων.
+\end{itemize}
+
+\newpage
+
+\subsection{Ανάλυση Μεταβλητής Στόχου (\eng{Label}) \& Ανισορροπία Κλάσεων}
+Η στήλη \texttt{\eng{Label}} περιγράφει την κατηγορία της δικτυακής ροής (κανονική ή τύπος επίθεσης). Στον Πίνακα \ref{tab:class_imbalance} παρουσιάζεται η λεπτομερής κατανομή των κλάσεων στο πλήρες \eng{dataset} καθώς και στο επιλεγμένο δείγμα των 100.000 εγγραφών.
+
+\begin{table}[H]
+\centering
+\caption{Κατανομή Κλάσεων και Ανισορροπία στο Πλήρες \eng{Dataset} και στο Δείγμα}
+\label{tab:class_imbalance}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{Κλάση (\eng{Label})} & \textbf{Πλήθος (\eng{Full})} & \textbf{Ποσοστό (\eng{Full})} & \textbf{Πλήθος (\eng{Sample})} & \textbf{Ποσοστό (\eng{Sample})} \\
+\midrule
+\texttt{\eng{BENIGN}} & 2.092.370 & 83,099\% & 83.049 & 83,049\% \\
+\texttt{\eng{DoS Hulk}} & 172.688 & 6,858\% & 6.854 & 6,854\% \\
+\texttt{\eng{DDoS}} & 127.995 & 5,083\% & 5.080 & 5,080\% \\
+\texttt{\eng{PortScan}} & 90.694 & 3,602\% & 3.600 & 3,600\% \\
+\texttt{\eng{DoS GoldenEye}} & 10.281 & 0,408\% & 408 & 0,408\% \\
+\texttt{\eng{FTP-Patator}} & 5.927 & 0,235\% & 235 & 0,235\% \\
+\texttt{\eng{DoS slowloris}} & 5.385 & 0,214\% & 214 & 0,214\% \\
+\texttt{\eng{DoS Slowhttptest}} & 5.228 & 0,208\% & 208 & 0,208\% \\
+\texttt{\eng{SSH-Patator}} & 3.217 & 0,128\% & 128 & 0,128\% \\
+\texttt{\eng{Bot}} & 1.948 & 0,077\% & 77 & 0,077\% \\
+\texttt{\eng{Web Attack - Brute Force}} & 1.470 & 0,058\% & 58 & 0,058\% \\
+\texttt{\eng{Web Attack - XSS}} & 652 & 0,026\% & 26 & 0,026\% \\
+\texttt{\eng{Infiltration}} & 35 & 0,001\% & 35 & 0,035\% \\
+\texttt{\eng{Web Attack - Sql Injection}} & 21 & 0,001\% & 21 & 0,021\% \\
+\texttt{\eng{Heartbleed}} & 7 & 0,000\% & 7 & 0,007\% \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{plots/label_distribution.png}
+    \caption{Κατανομή της Μεταβλητής Στόχου (\eng{Label}) στο Δείγμα σε Λογαριθμική Κλίμακα.}
+    \label{fig:label_dist}
+\end{figure}
+
+\paragraph{Συμπέρασμα για την Ανισορροπία:}
+Παρατηρείται ακραίο \textbf{\eng{class imbalance}}. Η κανονική κίνηση (\texttt{\eng{BENIGN}}) καταλαμβάνει το \textbf{83,1\%} του συνόλου, ενώ ορισμένες εξαιρετικά επικίνδυνες επιθέσεις (όπως το \texttt{\eng{Heartbleed}} ή το \texttt{\eng{Sql Injection}}) εμφανίζονται σε λιγότερο από το \textbf{0.001\%} των περιπτώσεων. 
+
+Η ιδιαιτερότητα αυτή απαιτεί ιδιαίτερη προσοχή στο στάδιο του \textbf{\eng{Classification}} (Ερώτημα 2), καθώς μοντέλα που εκπαιδεύονται χωρίς ειδική προετοιμασία τείνουν να αγνοούν τις σπάνιες κλάσεις, εμφανίζοντας υψηλό \textbf{\eng{Accuracy}} αλλά μηδενικό \textbf{\eng{Recall}} στις επιθέσεις. Για το λόγο αυτό, η χρήση μετρικών όπως το \textbf{\eng{F1-Score}} και η ανάλυση του \textbf{\eng{Confusion Matrix}} είναι επιβεβλημένες.
+
+\newpage
+
+\subsection{Στατιστική Περιγραφή και \eng{Boxplots}}
+Για κάθε αριθμητική μεταβλητή υπολογίστηκαν οι βασικές στατιστικές παράμετροι. Στον Πίνακα \ref{tab:stats} παρουσιάζονται τα συγκεντρωτικά στατιστικά μεγέθη για ένα αντιπροσωπευτικό σύνολο από τα τελικώς επιλεγμένα χαρακτηριστικά:
+
+\begin{table}[H]
+\centering
+\caption{Βασικά Στατιστικά Μεγέθη Επιλεγμένων Χαρακτηριστικών}
+\label{tab:stats}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lrrrrrrr}
+\toprule
+\textbf{Χαρακτηριστικό} & \textbf{\eng{Mean}} & \textbf{\eng{Std}} & \textbf{\eng{Min}} & \textbf{\eng{25\%}} & \textbf{\eng{50\%}} & \textbf{\eng{75\%}} & \textbf{\eng{Max}} \\
+\midrule
+\eng{Destination Port} & 8.574,33 & 18.913,00 & 0,00 & 53,00 & 80,00 & 443,00 & 65.529,00 \\
+\eng{Flow Duration} & 16.601.515,45 & 35.259.033,46 & 1,00 & 211,00 & 51.155,50 & 5.340.445,00 & 119.999.901,00 \\
+\eng{Total Fwd Packets} & 6,31 & 34,24 & 1,00 & 2,00 & 2,00 & 6,00 & 2.944,00 \\
+\eng{Total Backward Packets} & 6,15 & 38,43 & 0,00 & 1,00 & 2,00 & 5,00 & 3.043,00 \\
+\eng{Total Length of Fwd Packets} & 601,98 & 4.835,46 & 0,00 & 12,00 & 66,00 & 334,00 & 673.750,00 \\
+\eng{Fwd Packet Length Max} & 233,30 & 768,47 & 0,00 & 6,00 & 40,00 & 204,00 & 23.360,00 \\
+\eng{Fwd Packet Length Min} & 19,34 & 60,76 & 0,00 & 0,00 & 2,00 & 37,00 & 1.983,00 \\
+\eng{Flow Bytes/s} & 1.370.197,71 & 27.173.667,10 & 0,00 & 119,53 & 3.678,12 & 101.973,68 & 2.071.000.000,00 \\
+\eng{Flow Packets/s} & 47.403,87 & 203.273,48 & 0,02 & 2,01 & 66,34 & 17.621,15 & 3.000.000,00 \\
+\eng{Flow IAT Mean} & 1.433.647,25 & 4.576.926,70 & 0,50 & 84,33 & 20.765,17 & 561.418,39 & 119.000.000,00 \\
+\eng{Packet Length Mean} & 190,49 & 318,25 & 0,00 & 6,00 & 63,71 & 154,67 & 2.595,56 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\subsubsection{Ανίχνευση Ακραίων Τιμών (\eng{Outliers})}
+Τα \eng{boxplots} που δημιουργήθηκαν (Σχήμα \ref{fig:boxplots}) αποκαλύπτουν μια εξαιρετικά έντονη παρουσία \textbf{\eng{outliers}} σε όλα σχεδόν τα αριθμητικά χαρακτηριστικά.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{plots/boxplots_key_features.png}
+    \caption{Ανίχνευση Ακραίων Τιμών μέσω \eng{Boxplots} για Βασικά Χαρακτηριστικά.}
+    \label{fig:boxplots}
+\end{figure}
+
+Οι ακραίες αυτές τιμές δεν αποτελούν σφάλμα των δεδομένων, αλλά είναι συμπεριφορικά χαρακτηριστικά των επιθέσεων:
+\begin{itemize}
+    \item \textbf{\eng{Flow Duration}:} Επιθέσεις τύπου \eng{DoS/DDoS} (π.χ. \eng{Slowloris}) κρατούν σκόπιμα τις συνδέσεις ανοιχτές για τεράστια χρονικά διαστήματα, οδηγώντας σε πολύ υψηλές τιμές διάρκειας ροής.
+    \item \textbf{\eng{Flow Bytes/s} \& \eng{Flow Packets/s}:} Καταιγιστικές επιθέσεις (\eng{DDoS flood}, \eng{PortScan}) στέλνουν χιλιάδες πακέτα ανά δευτερόλεπτο, δημιουργώντας \eng{spikes} σε σχέση με την κανονική κίνηση.
+\end{itemize}
+
+\paragraph{Σημασία στην Προεπεξεργασία:}
+Η παρουσία \eng{outliers} καθιστά ακατάλληλη την απλή \eng{Min-Max} κανονικοποίηση, καθώς οι ακραίες τιμές θα συμπιέσουν το 99\% των υπόλοιπων δεδομένων σε ένα πολύ μικρό εύρος (π.χ. $[0, 0.01]$). Για τους αλγορίθμους που βασίζονται σε αποστάσεις (\eng{Logistic Regression}, \eng{K-Means}, \eng{DBSCAN}, \eng{PCA}), θα απαιτηθεί είτε \textbf{\eng{Standardization}} (Τυποποίηση με $z$-\eng{score}) είτε η χρήση του \textbf{\eng{RobustScaler}} ο οποίος χρησιμοποιεί το ενδοτεταρτημοριακό εύρος (\textbf{\eng{IQR}}).
+
+\newpage
+
+\subsection{Επιλογή Χαρακτηριστικών (\eng{Feature Selection})}
+Η εισαγωγή και των 78 αρχικών χαρακτηριστικών στα μοντέλα προκαλεί το πρόβλημα του \textbf{\eng{curse of dimensionality}}, αυξάνει δραματικά τον χρόνο εκπαίδευσης και εισάγει θόρυβο. Η επιλογή των χαρακτηριστικών βασίστηκε σε τέσσερα στάδια:
+
+\subsubsection{1. Αφαίρεση Στηλών Μηδενικής Διακύμανσης (\eng{Constant Columns})}
+Υπάρχουν στήλες που έχουν την ίδια ακριβώς τιμή (συνήθως $0$) σε ολόκληρο το \eng{dataset}. Αυτές οι στήλες δεν προσφέρουν καμία διακριτική ικανότητα. Αφαιρέθηκαν οι εξής \textbf{8 στήλες}:
+\begin{multicols}{2}
+\begin{itemize}
+    \item \texttt{\eng{Bwd PSH Flags}}
+    \item \texttt{\eng{Bwd URG Flags}}
+    \item \texttt{\eng{Fwd Avg Bytes/Bulk}}
+    \item \texttt{\eng{Fwd Avg Packets/Bulk}}
+    \item \texttt{\eng{Fwd Avg Bulk Rate}}
+    \item \texttt{\eng{Bwd Avg Bytes/Bulk}}
+    \item \texttt{\eng{Bwd Avg Packets/Bulk}}
+    \item \texttt{\eng{Bwd Avg Bulk Rate}}
+\end{itemize}
+\end{multicols}
+
+\subsubsection{2. Αφαίρεση Διπλότυπων Στηλών}
+Ορισμένα χαρακτηριστικά περιείχαν πανομοιότυπες τιμές λόγω σφαλμάτων στη διαδικασία παραγωγής του \eng{dataset}. Αφαιρέθηκαν οι εξής \textbf{9 διπλότυπες στήλες}:
+\begin{multicols}{2}
+\begin{itemize}
+    \item \texttt{\eng{Avg Fwd Segment Size}}
+    \item \texttt{\eng{Fwd Header Length.1}}
+    \item \texttt{\eng{Subflow Bwd Bytes}}
+    \item \texttt{\eng{Subflow Fwd Packets}}
+    \item \texttt{\eng{CWE Flag Count}}
+    \item \texttt{\eng{SYN Flag Count}}
+    \item \texttt{\eng{ECE Flag Count}}
+    \item \texttt{\eng{Subflow Bwd Packets}}
+    \item \texttt{\eng{Subflow Fwd Bytes}}
+\end{itemize}
+\end{multicols}
+
+\subsubsection{3. Αφαίρεση Στηλών με Πολύ Υψηλή Συσχέτιση (\eng{Pearson Correlation} > 0.95)}
+Για την αποφυγή του προβλήματος της πολυσυγγραμμικότητας (\textbf{\eng{multicollinearity}}), υπολογίστηκε η μήτρα συσχέτισης \eng{Pearson} ($r$) για όλα τα χαρακτηριστικά. Σε κάθε ζεύγος με $|r| > 0.95$, ένα από τα δύο χαρακτηριστικά αφαιρέθηκε. 
+Συνολικά αφαιρέθηκαν \textbf{13} στήλες. Ορισμένα χαρακτηριστικά παραδείγματα πολύ υψηλής συσχέτισης παρουσιάζονται παρακάτω:
+\begin{itemize}
+    \item \texttt{\eng{Total Length of Bwd Packets}} $\longleftrightarrow$ \texttt{\eng{Total Fwd Packets}} ($r = 0.9622$)
+    \item \texttt{\eng{Fwd Packet Length Std}} $\longleftrightarrow$ \texttt{\eng{Fwd Packet Length Max}} ($r = 0.9701$)
+    \item \texttt{\eng{Bwd Packet Length Std}} $\longleftrightarrow$ \texttt{\eng{Bwd Packet Length Max}} ($r = 0.9825$)
+    \item \texttt{\eng{Fwd IAT Total}} $\longleftrightarrow$ \texttt{\eng{Flow Duration}} ($r = 0.9985$)
+    \item \texttt{\eng{Packet Length Std}} $\longleftrightarrow$ \texttt{\eng{Max Packet Length}} ($r = 0.9838$)
+    \item \texttt{\eng{Average Packet Size}} $\longleftrightarrow$ \texttt{\eng{Packet Length Mean}} ($r = 0.9980$)
+    \item \texttt{\eng{Avg Bwd Segment Size}} $\longleftrightarrow$ \texttt{\eng{Bwd Packet Length Mean}} ($r = 1.0000$)
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.88\textwidth]{plots/correlation_heatmap.png}
+    \caption{\eng{Heatmap} Συσχέτισης \eng{Pearson} για 25 Επιλεγμένα Χαρακτηριστικά.}
+    \label{fig:heatmap}
+\end{figure}
+
+\subsubsection{4. Επίδραση στην Ποιότητα του Dataset}
+Η διαδικασία επιλογής χαρακτηριστικών επέφερε σημαντικά οφέλη:
+\begin{enumerate}
+    \item \textbf{Δραστική Μείωση Διαστασιμότητας:} Ο αριθμός των χαρακτηριστικών μειώθηκε από \textbf{78} σε \textbf{48} (μείωση κατά $38.5\%$).
+    \item \textbf{Υπολογιστική Αποδοτικότητα:} Η αφαίρεση 30 στηλών μειώνει δραστικά τον χρόνο εκπαίδευσης των μοντέλων (κυρίως κατά τη διαδικασία \eng{Grid Search} στο Ερώτημα 2 και \eng{DBSCAN}/\eng{Hierarchical} στο Ερώτημα 3).
+    \item \textbf{Προστασία από \eng{Overfitting}:} Αφαιρώντας πλεονάζουσες και θορυβώδεις πληροφορίες, διευκολύνουμε τα μοντέλα να μάθουν τους πραγματικούς κανόνες διάκρισης.
+    \item \textbf{Σταθερότητα Γραμμικών Μοντέλων:} Η εξάλειψη της πολυσυγγραμμικότητας επιτρέπει στη \eng{Logistic Regression} να συγκλίνει ταχύτερα και να παράγει σταθερούς, ερμηνεύσιμους συντελεστές βαρών.
+\end{enumerate}
+
+
+% ==========================================
+%   ΕΡΩΤΗΜΑ 2 -- ΚΑΤΗΓΟΡΙΟΠΟΙΗΣΗ (CLASSIFICATION)
+% ==========================================
+\section{Ερώτημα 2 -- Κατηγοριοποίηση (\eng{Classification})}
+
+\subsection{Προεπεξεργασία Δεδομένων \& Αντιμετώπιση Ανισορροπίας}
+
+\subsubsection{Κωδικοποίηση Μεταβλητής Στόχου}
+Η κατηγορική μεταβλητή-στόχος \texttt{\eng{Label}} κωδικοποιήθηκε σε ακέραιες τιμές στο εύρος $[0, 14]$ χρησιμοποιώντας τον \texttt{\eng{LabelEncoder}} της βιβλιοθήκης \texttt{\eng{scikit-learn}}. 
+
+Λόγω της δειγματοληψίας που εφαρμόστηκε στο Ερώτημα 1 (\eng{Stratified Sampling} με διατήρηση όλων των δειγμάτων για κλάσεις με λιγότερα από 50 δείγματα), η κλάση \texttt{\eng{Infiltration}} διατήρησε $35$ δείγματα στο τελικό \eng{dataset}. Συνεπώς, όλες οι $15$ κλάσεις περιείχαν τουλάχιστον $7$ δείγματα (για την κλάση \texttt{\eng{Heartbleed}}) και διατηρήθηκαν αυτούσιες για την εκπαίδευση, χωρίς να αφαιρεθεί καμία κλάση. Η αντιστοίχιση των κλάσεων δικτυακής κίνησης με τους αριθμητικούς κωδικούς τους παρουσιάζεται στον Πίνακα \ref{tab:class_encoding}.
+
+\begin{table}[H]
+\centering
+\caption{Αντιστοίχιση Κλάσεων Δικτυακής Κίνησης (\eng{Label}) με Αριθμητικούς Κωδικούς}
+\label{tab:class_encoding}
+\resizebox{0.65\textwidth}{!}{
+\begin{tabular}{lc}
+\toprule
+\textbf{Κλάση (\eng{Label})} & \textbf{Αριθμητικός Κωδικός} \\
+\midrule
+\texttt{\eng{BENIGN}} & 0 \\
+\texttt{\eng{Bot}} & 1 \\
+\texttt{\eng{DDoS}} & 2 \\
+\texttt{\eng{DoS GoldenEye}} & 3 \\
+\texttt{\eng{DoS Hulk}} & 4 \\
+\texttt{\eng{DoS Slowhttptest}} & 5 \\
+\texttt{\eng{DoS slowloris}} & 6 \\
+\texttt{\eng{FTP-Patator}} & 7 \\
+\texttt{\eng{Heartbleed}} & 8 \\
+\texttt{\eng{Infiltration}} & 9 \\
+\texttt{\eng{PortScan}} & 10 \\
+\texttt{\eng{SSH-Patator}} & 11 \\
+\texttt{\eng{Web Attack - Brute Force}} & 12 \\
+\texttt{\eng{Web Attack - Sql Injection}} & 13 \\
+\texttt{\eng{Web Attack - XSS}} & 14 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\subsubsection{Κανονικοποίηση Χαρακτηριστικών}
+Τα αριθμητικά χαρακτηριστικά των δεδομένων παρουσιάζουν μεγάλες αποκλίσεις στις κλίμακές τους (π.χ. \texttt{\eng{Flow Duration}} σε εκατομμύρια, \texttt{\eng{Total Fwd Packets}} σε μονοψήφιους αριθμούς). Για να διασφαλιστεί η σωστή και γρήγορη σύγκλιση των μοντέλων (κυρίως της γραμμικής \eng{Logistic Regression}), εφαρμόστηκε η μέθοδος της τυποποίησης (\textbf{\eng{Standardization}}) με τον \texttt{\eng{StandardScaler}}. 
+
+Για την αυστηρή αποφυγή διαρροής πληροφοριών (\textbf{\eng{data leakage}}), ο \texttt{\eng{StandardScaler}} εκπαιδεύτηκε (\texttt{\eng{fit}}) αποκλειστικά και μόνο στο σύνολο εκπαίδευσης (\texttt{\eng{train set}}) κάθε σεναρίου, και στη συνέχεια χρησιμοποιήθηκε για τον μετασχηματισμό (\texttt{\eng{transform}}) των συνόλων επικύρωσης (\texttt{\eng{validation set}}) και ελέγχου (\texttt{\eng{test set}}).
+
+\subsubsection{Διαχείριση Ανισορροπίας Κλάσεων}
+Όπως αναλύθηκε στο Ερώτημα 1, το σύνολο δεδομένων παρουσιάζει ακραία ανισορροπία με την κλάση \texttt{\eng{BENIGN}} να υπερβαίνει το $83\%$ των δειγμάτων. Χωρίς ειδική αντιμετώπιση, οι ταξινομητές θα παρουσίαζαν μεροληψία υπέρ της πλειοψηφικής κλάσης, εμφανίζοντας ψευδώς υψηλό \eng{accuracy} αλλά αποτυγχάνοντας πλήρως να εντοπίσουν τις κρίσιμες επιθέσεις.
+
+Για την αντιμετώπιση αυτού του προβλήματος, ενεργοποιήθηκε η παράμετρος \texttt{\eng{class\_weight='balanced'}} σε όλα τα μοντέλα της βιβλιοθήκης \texttt{\eng{scikit-learn}}. Η τεχνική αυτή αναθέτει αυτόματα βάρη στις κλάσεις, τα οποία είναι αντιστρόφως ανάλογα με τη συχνότητα εμφάνισής τους στα δεδομένα εκπαίδευσης, αυξάνοντας την ποινή για εσφαλμένες προβλέψεις στις σπάνιες κλάσεις.
+
+\subsection{Σενάριο Α -- Χειροκίνητη Αναζήτηση Πλέγματος (\eng{Manual Grid Search})}
+Στο πρώτο σενάριο, το δείγμα των $100.000$ εγγραφών διαχωρίστηκε στρωματοποιημένα σε τρία ανεξάρτητα σύνολα:
+\begin{itemize}
+    \item \textbf{Σύνολο Εκπαίδευσης (\eng{Training Set}):} $69.999$ δείγματα ($70\%$)
+    \item \textbf{Σύνολο Επικύρωσης (\eng{Validation Set}):} $15.001$ δείγματα ($15\%$)
+    \item \textbf{Σύνολο Ελέγχου (\eng{Test Set}):} $15.000$ δείγματα ($15\%$)
+\end{itemize}
+
+\subsubsection{Πλέγμα Υπερπαραμέτρων \& Επιλογή Μοντέλου}
+Πραγματοποιήθηκε χειροκίνητη αναζήτηση πλέγματος (\eng{Manual Grid Search}) εκπαιδεύοντας τα μοντέλα στο σύνολο εκπαίδευσης και αξιολογώντας τα στο σύνολο επικύρωσης με βάση τη μετρική \eng{Weighted F1-Score}. Το πλέγμα υπερπαραμέτρων που εξερευνήθηκε παρουσιάζεται στον Πίνακα \ref{tab:grid_A}.
+
+\begin{table}[H]
+\centering
+\caption{Πλέγμα Υπερπαραμέτρων Αναζήτησης (Σενάριο Α)}
+\label{tab:grid_A}
+\resizebox{0.8\textwidth}{!}{
+\begin{tabular}{lll}
+\toprule
+\textbf{Αλγόριθμος} & \textbf{Υπερπαράμετρος} & \textbf{Τιμές Αναζήτησης} \\
+\midrule
+\eng{Logistic Regression} & \eng{C} (Αντίστροφη Κανονικοποίηση) & 0.1, 1.0, 10.0 \\
+\midrule
+\eng{Decision Tree} & \eng{max\_depth} (Μέγιστο Βάθος) & 5, 10, 15 \\
+                    & \eng{criterion} (Κριτήριο Διάσπασης) & \eng{gini}, \eng{entropy} \\
+\midrule
+\eng{Random Forest} & \eng{n\_estimators} (Πλήθος Δέντρων) & 50, 100 \\
+                    & \eng{max\_depth} (Μέγιστο Βάθος) & 10, 20 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+Τα αποτελέσματα της αναζήτησης στο σύνολο επικύρωσης και οι βέλτιστες υπερπαράμετροι που επιλέχθηκαν για κάθε αλγόριθμο συνοψίζονται στον Πίνακα \ref{tab:best_params_A}.
+
+\begin{table}[H]
+\centering
+\caption{Βέλτιστες Υπερπαράμετροι και Απόδοση στο \eng{Validation Set} (Σενάριο Α)}
+\label{tab:best_params_A}
+\resizebox{0.85\textwidth}{!}{
+\begin{tabular}{llc}
+\toprule
+\textbf{Αλγόριθμος} & \textbf{Βέλτιστες Παράμετροι} & \textbf{\eng{Val F1 (Weighted)}} \\
+\midrule
+\eng{Logistic Regression} & \texttt{\eng{C=10.0}} & 0.9186 \\
+\eng{Decision Tree} & \texttt{\eng{max\_depth=15}}, \texttt{\eng{criterion='entropy'}} & 0.9969 \\
+\eng{Random Forest} & \texttt{\eng{n\_estimators=100}}, \texttt{\eng{max\_depth=20}} & 0.9977 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\subsubsection{Αξιολόγηση στο Σύνολο Ελέγχου (\eng{Test Set})}
+Τα βέλτιστα μοντέλα αξιολογήθηκαν τελικά στο ανεξάρτητο σύνολο ελέγχου (\texttt{\eng{test set}}), το οποίο δεν χρησιμοποιήθηκε καθόλου κατά τη διαδικασία εκπαίδευσης ή επιλογής παραμέτρων. Οι επιδόσεις τους παρουσιάζονται στον Πίνακα \ref{tab:test_results_A}.
+
+\begin{table}[H]
+\centering
+\caption{Επιδόσεις Μοντέλων στο Σύνολο Ελέγχου (Σενάριο Α)}
+\label{tab:test_results_A}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Αλγόριθμος} & \textbf{\eng{Accuracy}} & \textbf{\eng{Precision (W)}} & \textbf{\eng{Recall (W)}} & \textbf{\eng{F1 (Weighted)}} & \textbf{\eng{F1 (Macro)}} \\
+\midrule
+\eng{Logistic Regression} & 0.8900 & 0.9633 & 0.8900 & 0.9195 & 0.5404 \\
+\eng{Decision Tree} & 0.9967 & 0.9968 & 0.9967 & 0.9967 & 0.8762 \\
+\eng{Random Forest} & 0.9975 & 0.9975 & 0.9975 & 0.9974 & 0.8935 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+Οι πίνακες σύγχυσης των τριών μοντέλων για το Σενάριο Α απεικονίζονται στο Σχήμα \ref{fig:cm_A}.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{plots/cm_A_lr.png}
+        \caption{\eng{Logistic Regression}}
+        \label{fig:cm_A_lr}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{plots/cm_A_dt.png}
+        \caption{\eng{Decision Tree}}
+        \label{fig:cm_A_dt}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{plots/cm_A_rf.png}
+        \caption{\eng{Random Forest}}
+        \label{fig:cm_A_rf}
+    \end{subfigure}
+    \caption{Πίνακες Σύγχυσης των Μοντέλων Ταξινήμησης στο Σενάριο Α.}
+    \label{fig:cm_A}
+\end{figure}
+
+\subsection{Σενάριο Β -- Αναζήτηση με Διασταυρούμενη Επικύρωση (\eng{GridSearchCV})}
+Στο δεύτερο σενάριο, το δείγμα των $100.000$ εγγραφών διαχωρίστηκε στρωματοποιημένα σε:
+\begin{itemize}
+    \item \textbf{Σύνολο Εκπαίδευσης (\eng{Training Set}):} $80.000$ δείγματα ($80\%$)
+    \item \textbf{Σύνολο Ελέγχου (\eng{Test Set}):} $20.000$ δείγματα ($20\%$)
+\end{itemize}
+
+Για την επιλογή των υπερπαραμέτρων χρησιμοποιήθηκε η μέθοδος \texttt{\eng{GridSearchCV}} με στρωματοποιημένη διασταυρούμενη επικύρωση $3$ πτυχών (\textbf{\eng{3-Fold Stratified Cross-Validation}}). Η μέθοδος αυτή χωρίζει το σύνολο εκπαίδευσης σε 3 ίσα μέρη, εκπαιδεύει το μοντέλο στα 2 και το αξιολογεί στο εναπομείναν 1, επαναλαμβάνοντας τη διαδικασία κυκλικά 3 φορές. Με αυτόν τον τρόπο, η επιλογή των παραμέτρων γίνεται με πολύ μεγαλύτερη αξιοπιστία, καθώς η απόδοση υπολογίζεται ως ο μέσος όρος των 3 πτυχών.
+
+Η παράμετρος \texttt{\eng{refit=True}} εξασφάλισε ότι, αφού βρέθηκε ο βέλτιστος συνδυασμός υπερπαραμέτρων, το τελικό μοντέλο επανεκπαιδεύτηκε σε ολόκληρο το σύνολο εκπαίδευσης ($80.000$ δείγματα).
+
+\subsubsection{Βέλτιστες Παράμετροι}
+Οι βέλτιστοι συνδυασμοί υπερπαραμέτρων που προέκυψαν από τη διαδικασία διασταυρούμενης επικύρωσης παρουσιάζονται στον Πίνακα \ref{tab:best_params_B}.
+
+\begin{table}[H]
+\centering
+\caption{Βέλτιστες Υπερπαράμετροι και Απόδοση \eng{Cross-Validation} (Σενάριο Β)}
+\label{tab:best_params_B}
+\resizebox{0.85\textwidth}{!}{
+\begin{tabular}{llc}
+\toprule
+\textbf{Αλγόριθμος} & \textbf{Βέλτιστες Παράμετροι} & \textbf{\eng{CV F1 (Weighted)}} \\
+\midrule
+\eng{Logistic Regression} & \texttt{\eng{C=10.0}} & 0.9019 \\
+\eng{Decision Tree} & \texttt{\eng{max\_depth=15}}, \texttt{\eng{criterion='entropy'}} & 0.9966 \\
+\eng{Random Forest} & \texttt{\eng{n\_estimators=100}}, \texttt{\eng{max\_depth=20}} & 0.9972 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\subsubsection{Αξιολόγηση στο Σύνολο Ελέγχου (\eng{Test Set})}
+Τα βέλτιστα μοντέλα που εκπαιδεύτηκαν στο πλήρες σύνολο εκπαίδευσης του Σεναρίου Β αξιολογήθηκαν στο σύνολο ελέγχου ($20.000$ δείγματα). Οι επιδόσεις τους παρουσιάζονται συγκεντρωτικά στον Πίνακα \ref{tab:test_results_B}.
+
+\begin{table}[H]
+\centering
+\caption{Επιδόσεις Μοντέλων στο Σύνολο Ελέγχου (Σενάριο Β)}
+\label{tab:test_results_B}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Αλγόριθμος} & \textbf{\eng{Accuracy}} & \textbf{\eng{Precision (W)}} & \textbf{\eng{Recall (W)}} & \textbf{\eng{F1 (Weighted)}} & \textbf{\eng{F1 (Macro)}} \\
+\midrule
+\eng{Logistic Regression} & 0.8601 & 0.9657 & 0.8601 & 0.9027 & 0.4672 \\
+\eng{Decision Tree} & 0.9963 & 0.9969 & 0.9963 & 0.9966 & 0.8640 \\
+\eng{Random Forest} & 0.9975 & 0.9975 & 0.9975 & 0.9974 & 0.8856 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+Οι πίνακες σύγχυσης των τριών μοντέλων για το Σενάριο Β απεικονίζονται στο Σχήμα \ref{fig:cm_B}.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{plots/cm_B_lr.png}
+        \caption{\eng{Logistic Regression}}
+        \label{fig:cm_B_lr}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{plots/cm_B_dt.png}
+        \caption{\eng{Decision Tree}}
+        \label{fig:cm_B_dt}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{plots/cm_B_rf.png}
+        \caption{\eng{Random Forest}}
+        \label{fig:cm_B_rf}
+    \end{subfigure}
+    \caption{Πίνακες Σύγχυσης των Μοντέλων Ταξινήμησης στο Σενάριο Β.}
+    \label{fig:cm_B}
+\end{figure}
+
+\subsection{Συγκριτική Ανάλυση και Συμπεράσματα}
+
+\subsubsection{Σύγκριση Στρατηγικών Επικύρωσης}
+Η επιλογή της κατάλληλης στρατηγικής επικύρωσης είναι καθοριστική για τη γενικευσιμότητα των μοντέλων. Στον Πίνακα \ref{tab:scenario_comparison} παρουσιάζεται μια δομική σύγκριση των δύο σεναρίων.
+
+\begin{table}[H]
+\centering
+\caption{Σύγκριση Χαρακτηριστικών Σεναρίου Α και Σεναρίου Β}
+\label{tab:scenario_comparison}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lll}
+\toprule
+\textbf{Χαρακτηριστικό} & \textbf{Σενάριο Α} & \textbf{Σενάριο Β} \\
+\midrule
+\textbf{Στρατηγική} & Χειροκίνητη Αναζήτηση (\eng{Manual Grid Search}) & \eng{GridSearchCV} με \eng{k-fold CV} \\
+\textbf{Κατανομή Δεδομένων} & $70\%$ Εκπαίδευση / $15\%$ Επικύρωση / $15\%$ Έλεγχος & $80\%$ Εκπαίδευση / $20\%$ Έλεγχος \\
+\textbf{Αξιοπιστία Εκτίμησης} & Μέτρια (εξάρτηση από μία τυχαία διαίρεση) & Υψηλή (μέσος όρος από $3$ διαφορετικά \eng{folds}) \\
+\textbf{Δεδομένα Εκπαίδευσης} & $70.000$ δείγματα & $80.000$ δείγματα \\
+\textbf{Υπολογιστική Πολυπλοκότητα} & Χαμηλή & Υψηλή ($3$ φορές περισσότερες εκπαιδεύσεις) \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\subsubsection{Ανάλυση Συμπεριφοράς των Αλγορίθμων}
+Η απόδοση των τριών αλγορίθμων διαφέρει σημαντικά λόγω των υποκείμενων μαθηματικών αρχών λειτουργίας τους:
+
+\begin{enumerate}
+    \item \textbf{\eng{Logistic Regression}:} Αποτελεί έναν γραμμικό ταξινομητή ο οποίος επιχειρεί να διαχωρίσει τις κλάσεις μέσω υπερεπιπέδων. Λόγω της χαμηλής πολυπλοκότητάς του, λειτουργεί ως ένα εξαιρετικά γρήγορο \eng{baseline}. Ωστόσο, η απόδοσή του περιορίζεται σημαντικά στο συγκεκριμένο πρόβλημα (\eng{F1-Score} $\approx 90-92\%$), καθώς οι σχέσεις μεταξύ των χαρακτηριστικών της δικτυακής κίνησης και των επιθέσεων είναι έντονα μη-γραμμικές. Επιπλέον, εμφανίζει πολύ χαμηλή απόδοση στη μετρική \eng{Macro} \eng{F1-Score} ($\approx 46-54\%$), γεγονός που δείχνει ότι παρά τη χρήση των βαρών κλάσεων, δυσκολεύεται να ταξινομήσει σωστά τις πολύ σπάνιες κλάσεις επιθέσεων.
+    
+    \item \textbf{\eng{Decision Tree}:} Πρόκειται για ένα μη-γραμμικό μοντέλο που διαχωρίζει τον χώρο των χαρακτηριστικών σε ορθογώνιες περιοχές. Επιτυγχάνει εξαιρετική απόδοση στο \eng{test set} (\eng{F1-Score} $\approx 99.6\%$). Η βέλτιστη τιμή της παραμέτρου \texttt{\eng{max\_depth=15}} δείχνει ότι απαιτείται ένα αρκετά βαθύ δέντρο για να συλλάβει τους κανόνες διάκρισης των 15 κλάσεων. Η χρήση του κριτηρίου πληροφορίας \texttt{\eng{entropy}} οδήγησε σε καλύτερα αποτελέσματα από το \texttt{\eng{gini}}. Παρόλα αυτά, τα δέντρα απόφασης είναι ευαίσθητα σε μικρές αλλαγές των δεδομένων εκπαίδευσης (\eng{high variance}) και τείνουν να παρουσιάζουν \eng{overfitting} αν δεν περιοριστούν επαρκώς.
+    
+    \item \textbf{\eng{Random Forest}:} Είναι μια μέθοδος συνόλου (\eng{ensemble}) που συνδυάζει $100$ διαφορετικά δέντρα απόφασης μέσω της τεχνικής του \eng{bagging}. Αναδεικνύεται ως ο κορυφαίος αλγόριθμος και στα δύο σενάρια (\eng{F1-Score} $\approx 99.7\%$, \eng{Macro} \eng{F1-Score} $\approx 88.5-89.3\%$). Ο συνδυασμός πολλών δέντρων προσφέρει εξαιρετική ανθεκτικότητα απέναντι στο \eng{overfitting} και τον θόρυβο των δεδομένων, ενώ η τυχαία επιλογή χαρακτηριστικών σε κάθε διάσπαση επιτρέπει στο μοντέλο να εντοπίζει κρυφές συσχετίσεις. Επιτυγχάνει την υψηλότερη απόδοση στις σπάνιες κλάσεις επιθέσεων, όπως αποδεικνύεται από την ανώτερη τιμή του \eng{Macro} \eng{F1-Score}.
+\end{enumerate}
+
+\subsubsection{Συνολική Σύγκριση και Συμπέρασμα}
+Το Σχήμα \ref{fig:scenario_comparison_graph} παρουσιάζει τη γραφική σύγκριση των τριών μετρικών απόδοσης (\eng{Accuracy}, \eng{Weighted F1}, \eng{Macro F1}) για όλα τα μοντέλα στα δύο σενάρια.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.88\textwidth]{plots/comparison_scenarios.png}
+    \caption{Γραφική Σύγκριση Απόδοσης Μοντέλων: Σενάριο Α \eng{vs} Σενάριο Β.}
+
+    \label{fig:scenario_comparison_graph}
+\end{figure}
+
+Συμπερασματικά, το \textbf{Σενάριο Β} παρέχει μια σαφώς πιο αξιόπιστη και επιστημονικά τεκμηριωμένη μεθοδολογία για την επιλογή υπερπαραμέτρων. Παρόλο που οι τελικές επιδόσεις στο σύνολο ελέγχου είναι παρόμοιες (με τον \eng{Random Forest} να κυριαρχεί), η διασταυρούμενη επικύρωση διασφαλίζει ότι η απόδοση των μοντέλων δεν είναι προϊόν μιας ευνοϊκής τυχαίας διαίρεσης των δεδομένων. 
+
+Στο πλαίσιο ενός συστήματος ανίχνευσης εισβολών (\eng{IDS}), ο \textbf{\eng{Random Forest}} αποτελεί την πλέον κατάλληλη επιλογή, προσφέροντας σχεδόν τέλεια ανίχνευση (\eng{Accuracy} $99.75\%$) και εξαιρετική ικανότητα γενίκευσης σε άγνωστα δείγματα δικτυακής κίνησης, ενώ παράλληλα διαχειρίζεται υποδειγματικά την ακραία ανισορροπία των κλάσεων.
+
+\end{document}
+

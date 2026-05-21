@@ -1,6 +1,23 @@
 # Data files
-cleaned_sampled_data.csv
+*.csv
 *.zip
 
 # Plots and figures
 plots/
+
+# Python cache & virtual environments
+__pycache__/
+*.pyc
+venv/
+.venv/
+env/
+
+# LaTeX build files
+*.aux
+*.log
+*.toc
+*.out
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.pdf

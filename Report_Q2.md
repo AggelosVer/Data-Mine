@@ -21,11 +21,12 @@
 | DoS slowloris | 6 |
 | FTP-Patator | 7 |
 | Heartbleed | 8 |
-| PortScan | 9 |
-| SSH-Patator | 10 |
-| Web Attack - Brute Force | 11 |
-| Web Attack - Sql Injection | 12 |
-| Web Attack - XSS | 13 |
+| Infiltration | 9 |
+| PortScan | 10 |
+| SSH-Patator | 11 |
+| Web Attack - Brute Force | 12 |
+| Web Attack - Sql Injection | 13 |
+| Web Attack - XSS | 14 |
 
 ### 1.3 Κανονικοποίηση Χαρακτηριστικών
 Εφαρμόστηκε `StandardScaler` (μέσος=0, τυπική απόκλιση=1) στα αριθμητικά χαρακτηριστικά. Ο scaler εκπαιδεύτηκε **μόνο στο training set** για αποφυγή data leakage, ενώ εφαρμόστηκε μεταγενέστερα στο validation και test set.
@@ -39,7 +40,7 @@
 | Σύνολο | Εγγραφές | Ποσοστό |
 |:---|:---:|:---:|
 | Training | 69,999 | 70% |
-| Validation | 15,000 | 15% |
+| Validation | 15,001 | 15% |
 | Test | 15,000 | 15% |
 
 Ο διαχωρισμός έγινε **στρωματοποιημένα** (stratified) διατηρώντας τις αναλογίες των κλάσεων. Το validation set χρησιμοποιήθηκε αποκλειστικά για επιλογή υπερπαραμέτρων, και το test set για τελική αξιολόγηση.
@@ -57,17 +58,17 @@
 
 | Αλγόριθμος | Βέλτιστες Παράμετροι | Val F1 (W) |
 |:---|:---|:---:|
-| Logistic Regression | C=10.0 | 0.9100 |
+| Logistic Regression | C=10.0 | 0.9186 |
 | Decision Tree | max_depth=15, criterion=entropy | 0.9969 |
-| Random Forest | n_estimators=100, max_depth=20 | 0.9976 |
+| Random Forest | n_estimators=100, max_depth=20 | 0.9977 |
 
 ### 2.4 Αποτελέσματα στο Test Set
 
 | Αλγόριθμος | Accuracy | Precision (W) | Recall (W) | F1 (W) | F1 (Macro) |
 |:---|:---:|:---:|:---:|:---:|:---:|
-| Logistic Regression | 0.8737 | 0.9713 | 0.8737 | 0.9146 | 0.5295 |
-| Decision Tree | 0.9971 | 0.9969 | 0.9971 | 0.9970 | 0.8229 |
-| Random Forest | 0.9984 | 0.9984 | 0.9984 | 0.9984 | 0.9247 |
+| Logistic Regression | 0.8900 | 0.9633 | 0.8900 | 0.9195 | 0.5404 |
+| Decision Tree | 0.9967 | 0.9968 | 0.9967 | 0.9967 | 0.8762 |
+| Random Forest | 0.9975 | 0.9975 | 0.9975 | 0.9974 | 0.8935 |
 
 Οι πίνακες σύγχυσης αποθηκεύτηκαν ως `plots/cm_A_*.png`.
 
@@ -76,7 +77,7 @@
 ### 3.1 Στρατηγική Διαχωρισμού
 | Σύνολο | Εγγραφές | Ποσοστό |
 |:---|:---:|:---:|
-| Training | 79,999 | 80% |
+| Training | 80,000 | 80% |
 | Test | 20,000 | 20% |
 
 Χρησιμοποιήθηκε `GridSearchCV` με **3-fold Stratified Cross-Validation** στο training set για επιλογή υπερπαραμέτρων (μεγιστοποίηση F1 weighted). Το `refit=True` (default) επανεκπαιδεύει αυτόματα το βέλτιστο μοντέλο στο πλήρες training set.
@@ -85,17 +86,17 @@
 
 | Αλγόριθμος | Βέλτιστες Παράμετροι | CV F1 (W) |
 |:---|:---|:---:|
-| Logistic Regression | C=10.0 | 0.9116 |
-| Decision Tree | criterion=entropy, max_depth=15 | 0.9968 |
-| Random Forest | max_depth=20, n_estimators=100 | 0.9970 |
+| Logistic Regression | C=10.0 | 0.9019 |
+| Decision Tree | criterion=entropy, max_depth=15 | 0.9966 |
+| Random Forest | max_depth=20, n_estimators=100 | 0.9972 |
 
 ### 3.3 Αποτελέσματα στο Test Set
 
 | Αλγόριθμος | Accuracy | Precision (W) | Recall (W) | F1 (W) | F1 (Macro) |
 |:---|:---:|:---:|:---:|:---:|:---:|
-| Logistic Regression | 0.8807 | 0.9719 | 0.8807 | 0.9189 | 0.5386 |
-| Decision Tree | 0.9973 | 0.9973 | 0.9973 | 0.9973 | 0.8289 |
-| Random Forest | 0.9984 | 0.9984 | 0.9984 | 0.9984 | 0.8874 |
+| Logistic Regression | 0.8601 | 0.9657 | 0.8601 | 0.9027 | 0.4672 |
+| Decision Tree | 0.9963 | 0.9969 | 0.9963 | 0.9966 | 0.8640 |
+| Random Forest | 0.9975 | 0.9975 | 0.9975 | 0.9974 | 0.8856 |
 
 Οι πίνακες σύγχυσης αποθηκεύτηκαν ως `plots/cm_B_*.png`.
 
@@ -112,8 +113,8 @@
 
 ### 4.2 Καλύτερο Μοντέλο ανά Σενάριο
 
-* **Σενάριο Α:** **Random Forest** → F1(W)=0.9984, Accuracy=0.9984
-* **Σενάριο Β:** **Random Forest** → F1(W)=0.9984, Accuracy=0.9984
+* **Σενάριο Α:** **Random Forest** → F1(W)=0.9974, Accuracy=0.9975
+* **Σενάριο Β:** **Random Forest** → F1(W)=0.9974, Accuracy=0.9975
 
 ### 4.3 Ανάλυση ανά Αλγόριθμο
 
