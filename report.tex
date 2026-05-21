@@ -76,7 +76,7 @@
     filecolor=black,      
     urlcolor=black,
     citecolor=black,
-    pdftitle={Εξόρυξη Δεδομένων - Εργαστηριακή Άσκηση 2025-2026},
+    pdftitle={Εξόρυξη Δεδομένων και Μηχανική Μάθηση - Εργαστηριακή Άσκηση 2025-2026},
     pdfpagemode=FullScreen,
 }
 
@@ -88,7 +88,7 @@
 % --- Ρυθμίσεις fancyhdr (Headers & Footers) ---
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[L]{\small\color{gray}Εξόρυξη Δεδομένων \& Αλγόριθμοι Μάθησης}
+\fancyhead[L]{\small\color{gray}Εξόρυξη Δεδομένων \& Μηχανική Μάθηση}
 \fancyhead[R]{\small\color{gray}Πανεπιστήμιο Πατρών}
 \fancyfoot[C]{\thepage}
 \renewcommand{\headrulewidth}{0.4pt}
@@ -104,38 +104,38 @@
 % ==========================================
 \begin{titlepage}
     \centering
-    \vspace*{1cm}
     
-    \includegraphics[width=0.3\textwidth]{upatras_logo.png} \par % Αν έχετε το logo, αλλιώς σχολιάστε το
-    \vspace{0.8cm}
+    \includegraphics[width=1.0\textwidth]{upatras_logo.png} \par % Αν έχετε το logo, αλλιώς σχολιάστε το
+    \vspace{1.0cm}
     
     {\large\bfseries ΠΑΝΕΠΙΣΤΗΜΙΟ ΠΑΤΡΩΝ}\\[0.2cm]
-    {\large ΤΜΗΜΑ ΜΗΧΑΝΙΚΩΝ ΗΛΕΚΤΡΟΝΙΚΩΝ ΥΠΟΛΟΓΙΣΤΩΝ \& ΠΛΗΡΟΦΟΡΙΚΗΣ}\\[0.2cm]
-    {\large ΕΡΓΑΣΤΗΡΙΟ ΣΥΣΤΗΜΑΤΩΝ ΥΠΟΛΟΓΙΣΤΩΝ \& ΕΦΑΡΜΟΓΩΝ}
+    {\large ΤΜΗΜΑ ΜΗΧΑΝΙΚΩΝ ΗΛΕΚΤΡΟΝΙΚΩΝ ΥΠΟΛΟΓΙΣΤΩΝ \& ΠΛΗΡΟΦΟΡΙΚΗΣ}
     
     \vspace{2.5cm}
     
     \rule{\linewidth}{1.5pt} \\[0.4cm]
-    {\LARGE\bfseries Ανάλυση Δικτυακής Κίνησης και Ανίχνευση Κυβερνοεπιθέσεων με Τεχνικές Εξόρυξης Δεδομένων} \\[0.2cm]
+    {\LARGE\bfseries Ανάλυση Δικτυακής Κίνησης και Ανίχνευση Κυβερνοεπιθέσεων με Τεχνικές Εξόρυξης Δεδομένων} \\[0.4cm]
+    {\large\bfseries Μάθημα: Εξόρυξη Δεδομένων και Μηχανική Μάθηση} \\[0.2cm]
     {\large\bfseries Εργαστηριακή Άσκηση -- Εαρινό Εξάμηνο 2025-2026}
     \rule{\linewidth}{1.5pt} \\
     
     \vspace{2.5cm}
     
     \noindent
-    \begin{minipage}{0.5\textwidth}
+    \begin{minipage}[t]{0.40\textwidth}
         \begin{flushleft} \large
             \emph{Διδάσκοντες:}\\
             Καθ. \textbf{Β. Μεγαλοοικονόμου}\\
             Αναπλ. Καθ. \textbf{Χ. Μακρής}
         \end{flushleft}
     \end{minipage}
-    \begin{minipage}{0.45\textwidth}
-        \begin{flushright} \large
+    \hfill
+    \begin{minipage}[t]{0.56\textwidth}
+        \begin{flushleft} \large
             \emph{Φοιτητές:}\\
-            \textbf{[Όνομα Φοιτητή 1]} (Α.Μ. [...])\\
-            \textbf{[Όνομα Φοιτητή 2]} (Α.Μ. [...]) % Αν είναι ατομική, σβήστε τη γραμμή
-        \end{flushright}
+            \textbf{Βερύκιος Άγγελος} (Α.Μ. 1100500)\\
+            \textbf{Κολύβρας Κωνσταντίνος} (Α.Μ. 1103826)
+        \end{flushleft}
     \end{minipage}
     
     \vfill
@@ -168,6 +168,7 @@
     \item \textbf{\eng{Pandas (v2.x):}} Για τη φόρτωση, συγχώνευση, καθαρισμό και διαχείριση των δεδομένων.
     \item \textbf{\eng{NumPy (v1.x):}} Για αποδοτικές μαθηματικές πράξεις και διαχείριση πινάκων, \textbf{\eng{NaN}} και \textbf{\eng{Infinite}} τιμών.
     \item \textbf{\eng{Scikit-Learn (v1.x):}} Για τον διαχωρισμό δεδομένων (\textbf{\eng{train/test split}}), την επιλογή χαρακτηριστικών, την κανονικοποίηση και την εκπαίδευση των αλγορίθμων μηχανικής μάθησης.
+    \item \textbf{\eng{SciPy (v1.x):}} Για τον υπολογισμό της μήτρας διασύνδεσης (\textbf{\eng{linkage}}) και τη σχεδίαση του δενδρογράμματος (\textbf{\eng{dendrogram}}) κατά την ιεραρχική ομαδοποίηση.
     \item \textbf{\eng{Matplotlib \& Seaborn:}} Για τη δημιουργία των απαραίτητων γραφημάτων (\textbf{\eng{boxplots}}, \textbf{\eng{heatmaps}}, \textbf{\eng{barplots}}).
 \end{itemize}
 
@@ -177,19 +178,27 @@
 \begin{infobox}[Οδηγίες \eng{Setup} (\eng{Terminal})]
 \begin{enumerate}
     \item \textbf{Δημιουργία \eng{Virtual Environment}:}
+    \begin{otherlanguage}{english}
     \begin{verbatim}
     python -m venv venv
-    source venv/bin/activate  # Για Linux/macOS
-    .\venv\Scripts\activate   # Για Windows
+    source venv/bin/activate  # For Linux/macOS
+    .\venv\Scripts\activate   # For Windows
     \end{verbatim}
+    \end{otherlanguage}
     \item \textbf{Εγκατάσταση των Βιβλιοθηκών:}
+    \begin{otherlanguage}{english}
     \begin{verbatim}
-    pip install pandas numpy scikit-learn matplotlib seaborn
+    pip install pandas numpy scikit-learn scipy matplotlib seaborn
     \end{verbatim}
-    \item \textbf{Εκτέλεση του Κώδικα:}
+    \end{otherlanguage}
+    \item \textbf{Εκτέλεση των Προγραμμάτων:}
+    \begin{otherlanguage}{english}
     \begin{verbatim}
-    python eda.py
+    python eda.py             # For Question 1 (Data Analysis)
+    python classification.py  # For Question 2 (Classification)
+    python clustering.py      # For Question 3 (Clustering)
     \end{verbatim}
+    \end{otherlanguage}
 \end{enumerate}
 \end{infobox}
 
@@ -313,7 +322,7 @@
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{plots/boxplots_key_features.png}
+    \includegraphics[width=0.65\textwidth]{plots/boxplots_key_features.png}
     \caption{Ανίχνευση Ακραίων Τιμών μέσω \eng{Boxplots} για Βασικά Χαρακτηριστικά.}
     \label{fig:boxplots}
 \end{figure}
@@ -326,8 +335,6 @@
 
 \paragraph{Σημασία στην Προεπεξεργασία:}
 Η παρουσία \eng{outliers} καθιστά ακατάλληλη την απλή \eng{Min-Max} κανονικοποίηση, καθώς οι ακραίες τιμές θα συμπιέσουν το 99\% των υπόλοιπων δεδομένων σε ένα πολύ μικρό εύρος (π.χ. $[0, 0.01]$). Για τους αλγορίθμους που βασίζονται σε αποστάσεις (\eng{Logistic Regression}, \eng{K-Means}, \eng{DBSCAN}, \eng{PCA}), θα απαιτηθεί είτε \textbf{\eng{Standardization}} (Τυποποίηση με $z$-\eng{score}) είτε η χρήση του \textbf{\eng{RobustScaler}} ο οποίος χρησιμοποιεί το ενδοτεταρτημοριακό εύρος (\textbf{\eng{IQR}}).
-
-\newpage
 
 \subsection{Επιλογή Χαρακτηριστικών (\eng{Feature Selection})}
 Η εισαγωγή και των 78 αρχικών χαρακτηριστικών στα μοντέλα προκαλεί το πρόβλημα του \textbf{\eng{curse of dimensionality}}, αυξάνει δραματικά τον χρόνο εκπαίδευσης και εισάγει θόρυβο. Η επιλογή των χαρακτηριστικών βασίστηκε σε τέσσερα στάδια:
@@ -671,6 +678,320 @@
 Συμπερασματικά, το \textbf{Σενάριο Β} παρέχει μια σαφώς πιο αξιόπιστη και επιστημονικά τεκμηριωμένη μεθοδολογία για την επιλογή υπερπαραμέτρων. Παρόλο που οι τελικές επιδόσεις στο σύνολο ελέγχου είναι παρόμοιες (με τον \eng{Random Forest} να κυριαρχεί), η διασταυρούμενη επικύρωση διασφαλίζει ότι η απόδοση των μοντέλων δεν είναι προϊόν μιας ευνοϊκής τυχαίας διαίρεσης των δεδομένων. 
 
 Στο πλαίσιο ενός συστήματος ανίχνευσης εισβολών (\eng{IDS}), ο \textbf{\eng{Random Forest}} αποτελεί την πλέον κατάλληλη επιλογή, προσφέροντας σχεδόν τέλεια ανίχνευση (\eng{Accuracy} $99.75\%$) και εξαιρετική ικανότητα γενίκευσης σε άγνωστα δείγματα δικτυακής κίνησης, ενώ παράλληλα διαχειρίζεται υποδειγματικά την ακραία ανισορροπία των κλάσεων.
+
+\newpage
+% ==========================================
+%   ΕΡΩΤΗΜΑ 3 -- ΟΜΑΔΟΠΟΙΗΣΗ (CLUSTERING)
+% ==========================================
+\section{Ερώτημα 3 -- Ομαδοποίηση (\eng{Clustering})}
+
+Αυτή η ενότητα παρουσιάζει τα αποτελέσματα εφαρμογής αλγορίθμων μη-επιβλεπόμενης μάθησης (\eng{unsupervised learning}) στο σύνολο δεδομένων \textbf{\eng{CIC-IDS-2017}}, με στόχο την ανακάλυψη φυσικών ομαδοποιήσεων στη δικτυακή κίνηση.
+
+\subsection{Προεπεξεργασία Δεδομένων}
+
+\subsubsection{Σύνολο Δεδομένων \& Μεταβλητή-Στόχος}
+Χρησιμοποιήθηκε το καθαρισμένο δείγμα \texttt{\eng{cleaned\_sampled\_data.csv}} ($100.000$ εγγραφές, $48$ χαρακτηριστικά) που προέκυψε από το Ερώτημα 1. Σε αντίθεση με το Ερώτημα 2 (Κατηγοριοποίηση), η ομαδοποίηση πραγματοποιήθηκε \textbf{χωρίς τη χρήση της μεταβλητής \eng{Label}}. Η μεταβλητή \eng{Label} διατηρήθηκε και χρησιμοποιείται αποκλειστικά για την εκ των υστέρων ποιοτική αξιολόγηση και σύγκριση των συστάδων (\eng{ground truth comparison}).
+
+\subsubsection{Κανονικοποίηση}
+Εφαρμόστηκε τυποποίηση (\textbf{\eng{Standardization}} μέσω του \texttt{\eng{StandardScaler}}), καθώς οι αλγόριθμοι ομαδοποίησης που βασίζονται σε υπολογισμό αποστάσεων (όπως ο \eng{K-Means} και ο \eng{DBSCAN}) είναι εξαιρετικά ευαίσθητοι στην κλίμακα των δεδομένων.
+
+\subsubsection{Μείωση Διαστασιμότητας (\eng{PCA}) για Οπτικοποίηση}
+Για τις ανάγκες της γραφικής απεικόνισης των συστάδων, εφαρμόστηκε η μέθοδος Ανάλυσης Κυρίων Συνιστωσών (\textbf{\eng{Principal Component Analysis - PCA}}) με $2$ συνιστώσες (\eng{components}), η οποία εξηγεί το \textbf{27.50\%} της συνολικής διακύμανσης των δεδομένων. Επισημαίνεται ότι η \eng{PCA} χρησιμοποιήθηκε \textbf{μόνο για την οπτικοποίηση} σε δισδιάστατο χώρο, ενώ η εκπαίδευση όλων των αλγορίθμων ομαδοποίησης πραγματοποιήθηκε στον πλήρη χώρο των $48$ διαστάσεων.
+
+\subsubsection{Μέγεθος \eng{Dataset} ανά Αλγόριθμο}
+Λόγω της διαφορετικής υπολογιστικής και χωρικής πολυπλοκότητας κάθε αλγορίθμου, το μέγεθος του χρησιμοποιούμενου συνόλου δεδομένων προσαρμόστηκε κατάλληλα προκειμένου να καταστεί εφικτή η εκτέλεσή τους σε λογικά χρονικά πλαίσια (Πίνακας \ref{tab:clustering_dataset_sizes}).
+
+\begin{table}[H]
+\centering
+\caption{Μέγεθος \eng{Dataset} και Περιορισμοί ανά Αλγόριθμο Ομαδοποίησης}
+\label{tab:clustering_dataset_sizes}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lcp{8cm}}
+\toprule
+\textbf{Αλγόριθμος} & \textbf{Δείγματα} & \textbf{Λόγος Περιορισμού} \\
+\midrule
+\eng{K-Means} & 100.000 & Εξαιρετικά αποδοτικός, κλιμακώνεται γραμμικά. \\
+\eng{Hierarchical} (Ward / Complete / Average) & 5.000 & Απαιτεί $O(N^2)$ μνήμη (τετραγωνική πολυπλοκότητα). \\
+\eng{DBSCAN} & 20.000 & Ισορροπία μεταξύ χρόνου εκτέλεσης και αντιπροσωπευτικότητας. \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\subsection{\eng{K-Means Clustering}}
+
+\subsubsection{Επιλογή Βέλτιστου $k$}
+Για τον προσδιορισμό του βέλτιστου αριθμού συστάδων ($k$), πραγματοποιήθηκε πειραματισμός για εύρος τιμών $k \in [2, 20]$ σε δείγμα $20.000$ παρατηρήσεων. Χρησιμοποιήθηκαν δύο συμπληρωματικές μεθοδολογίες (Σχήμα \ref{fig:kmeans_selection}):
+\begin{itemize}
+    \item \textbf{Μέθοδος του Αγκώνα (\eng{Elbow Method}):} Αξιολογεί τη συνολική ενδοκλασική αδράνεια (\eng{inertia} ή \eng{Sum of Squared Errors - SSE}) συναρτήσει του $k$. Αναζητάται το σημείο κάμψης («αγκώνας») όπου ο ρυθμός μείωσης της αδράνειας σταθεροποιείται.
+    \item \textbf{Μετρική Σιλουέτας (\eng{Silhouette Score}):} Αποτελεί μέτρο της ποιότητας της ομαδοποίησης, αξιολογώντας τη συνοχή των σημείων εντός της συστάδας τους σε σύγκριση με την απόστασή τους από τη γειτονική συστάδα. Επιλέγεται η τιμή του $k$ που μεγιστοποιεί το \eng{Silhouette Score}.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{plots/kmeans_elbow_silhouette.png}
+    \caption{Εφαρμογή των μεθόδων \eng{Elbow} και \eng{Silhouette} για την επιλογή βέλτιστου $k$ στον \eng{K-Means}.}
+    \label{fig:kmeans_selection}
+\end{figure}
+
+Με βάση τα αποτελέσματα, η μέγιστη τιμή της μετρικής \eng{Silhouette Score} επιτυγχάνεται για \textbf{$k=2$}.
+
+\subsubsection{Υλοποίηση \& Ρυθμίσεις}
+Ο αλγόριθμος εκτελέστηκε με τις εξής παραμέτρους:
+\begin{itemize}
+    \item \textbf{Αρχικοποίηση \eng{k-means++}:} Για την έξυπνη επιλογή των αρχικών κέντρων, αποφεύγοντας την παγίδευση σε τοπικά ελάχιστα.
+    \item \textbf{\eng{n\_init}=10:} Εκτέλεση του αλγορίθμου 10 φορές με διαφορετικές αρχικοποιήσεις και επιλογή της βέλτιστης.
+    \item \textbf{\eng{max\_iter}=300:} Μέγιστος αριθμός επαναλήψεων για τη σύγκλιση των κέντρων.
+\end{itemize}
+
+\subsubsection{Αποτελέσματα}
+Τα στατιστικά αποτελέσματα της ομαδοποίησης για $k=2$ παρουσιάζονται στον Πίνακα \ref{tab:kmeans_metrics}, ενώ η οπτικοποίηση των συστάδων μετά από ανάλυση \eng{PCA} απεικονίζεται στο Σχήμα \ref{fig:kmeans_pca_plot}.
+
+\begin{table}[H]
+\centering
+\caption{Μετρικές Αξιολόγησης \eng{K-Means} ($k=2$)}
+\label{tab:kmeans_metrics}
+\begin{tabular}{lc}
+\toprule
+\textbf{Μετρική} & \textbf{Τιμή} \\
+\midrule
+\eng{Silhouette Score} & 0.5266 \\
+\eng{Davies-Bouldin Index} & 1.7520 \\
+\eng{Adjusted Rand Index (ARI vs Label)} & 0.3725 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{plots/kmeans_pca.png}
+    \caption{Διάγραμμα διασποράς (\eng{PCA}) των αποτελεσμάτων ομαδοποίησης του \eng{K-Means} ($k=2$).}
+    \label{fig:kmeans_pca_plot}
+\end{figure}
+
+\subsection{Ιεραρχική Ομαδοποίηση (\eng{Hierarchical Clustering}) -- Σύγκριση Μεθόδων Σύνδεσης}
+
+\subsubsection{Μεθοδολογία}
+Εφαρμόστηκε ο αλγόριθμος Συσσωρευτικής Ιεραρχικής Ομαδοποίησης (\textbf{\eng{Agglomerative Hierarchical Clustering}}) για σταθερό αριθμό συστάδων $k=2$ σε δείγμα $5.000$ παρατηρήσεων. Πραγματοποιήθηκε συστηματική σύγκριση τριών διαφορετικών μεθόδων σύνδεσης (\eng{linkage methods}):
+\begin{itemize}
+    \item \textbf{\eng{Ward}:} Ελαχιστοποιεί το άθροισμα των τετραγώνων των αποκλίσεων εντός των συστάδων, τείνοντας να παράγει ισομεγέθεις και σφαιρικές συστάδες.
+    \item \textbf{\eng{Complete Linkage}:} Συνδέει τις συστάδες με βάση τη μέγιστη απόσταση μεταξύ των σημείων τους.
+    \item \textbf{\eng{Average Linkage}:} Συνδέει τις συστάδες με βάση τη μέση απόσταση μεταξύ όλων των ζευγών σημείων τους.
+\end{itemize}
+
+\subsubsection{Αποτελέσματα Σύγκρισης}
+Οι μετρικές ποιότητας για κάθε μέθοδο σύνδεσης παρουσιάζονται στον Πίνακα \ref{tab:hierarchical_comparison}.
+
+\begin{table}[H]
+\centering
+\caption{Σύγκριση Μεθόδων Σύνδεσης (\eng{Linkage Methods}) στην Ιεραρχική Ομαδοποίηση}
+\label{tab:hierarchical_comparison}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lccc}
+\toprule
+\textbf{Μέθοδος Σύνδεσης} & \textbf{\eng{Silhouette Score} $\uparrow$} & \textbf{\eng{Davies-Bouldin Index} $\downarrow$} & \textbf{\eng{Adjusted Rand Index (ARI)} $\uparrow$} \\
+\midrule
+\textbf{\eng{ward}} & 0.5290 & 1.7103 & \textbf{0.3807} \\
+\textbf{\eng{complete}} & \textbf{0.9253} & \textbf{0.0510} & -0.0004 \\
+\textbf{\eng{average}} & \textbf{0.9253} & \textbf{0.0510} & -0.0004 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\paragraph{Παρατήρηση:} Οι μέθοδοι \eng{complete} και \eng{average} εμφανίζουν εξαιρετικά υψηλό \eng{Silhouette Score} ($0.9253$) και σχεδόν μηδενικό \eng{Davies-Bouldin Index} ($0.0510$). Ωστόσο, η τιμή του \eng{ARI} είναι αρνητική/μηδενική ($-0.0004$), υποδεικνύοντας ότι η ομαδοποίηση αυτή δεν σχετίζεται καθόλου με τις πραγματικές κλάσεις. Αυτό συμβαίνει διότι απομονώνουν ελάχιστα εξαιρετικά απομακρυσμένα σημεία (\eng{outliers}) σε μια συστάδα και τοποθετούν το 99.9\% των υπόλοιπων σημείων στη δεύτερη συστάδα. Αντίθετα, η μέθοδος \eng{ward} επιτυγχάνει μια πιο ισορροπημένη κατανομή με \eng{ARI} $0.3807$.
+
+\subsubsection{Δενδρογράμματα \& Οπτικοποιήσεις \eng{PCA}}
+Στο Σχήμα \ref{fig:hierarchical_dendrograms} παρουσιάζονται τα δενδρογράμματα για τις τρεις μεθόδους σύνδεσης, τα οποία αποτυπώνουν την ιεραρχική δομή συγχώνευσης των δεδομένων. Στο Σχήμα \ref{fig:hierarchical_pca_plots} εμφανίζονται τα αντίστοιχα διαγράμματα διασποράς στον χώρο \eng{PCA}.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{plots/hierarchical_dendrogram_ward.png}
+        \caption{\eng{Ward Linkage}}
+        \label{fig:dendro_ward_sub}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{plots/hierarchical_dendrogram_complete.png}
+        \caption{\eng{Complete Linkage}}
+        \label{fig:dendro_complete_sub}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{plots/hierarchical_dendrogram_average.png}
+        \caption{\eng{Average Linkage}}
+        \label{fig:dendro_average_sub}
+    \end{subfigure}
+    \caption{Δενδρογράμματα Ιεραρχικής Ομαδοποίησης για διαφορετικές μεθόδους σύνδεσης (δείγμα $5.000$ σημείων).}
+    \label{fig:hierarchical_dendrograms}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{plots/hierarchical_pca_ward.png}
+        \caption{\eng{Ward Linkage}}
+        \label{fig:pca_ward_sub}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{plots/hierarchical_pca_complete.png}
+        \caption{\eng{Complete Linkage}}
+        \label{fig:pca_complete_sub}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{plots/hierarchical_pca_average.png}
+        \caption{\eng{Average Linkage}}
+        \label{fig:pca_average_sub}
+    \end{subfigure}
+    \caption{Οπτικοποίηση αποτελεσμάτων Ιεραρχικής Ομαδοποίησης ($k=2$) με \eng{PCA} για τις τρεις μεθόδους σύνδεσης.}
+    \label{fig:hierarchical_pca_plots}
+\end{figure}
+
+\subsection{\eng{DBSCAN} -- Διερεύνηση Υπερπαραμέτρων (\eng{Grid Search})}
+
+\subsubsection{Μεθοδολογία}
+Ο αλγόριθμος \eng{DBSCAN} είναι ένας αλγόριθμος βασισμένος στην πυκνότητα των σημείων. Για την εύρεση της βέλτιστης δομής ομαδοποίησης, πραγματοποιήθηκε συστηματική αναζήτηση πλέγματος (\eng{Grid Search}) σε δείγμα $20.000$ εγγραφών με τις ακόλουθες υπερπαραμέτρους:
+\begin{itemize}
+    \item \textbf{\eng{Epsilon (eps)} ($\epsilon$):} Ακτίνα γειτνίασης $\in \{1.0, 1.5, 2.0, 2.5\}$.
+    \item \textbf{\eng{Min Samples} (\eng{min\_samples}):} Ελάχιστος αριθμός σημείων εντός της ακτίνας $\epsilon$ για το χαρακτηρισμό ενός σημείου ως πυρήνα (\eng{core point}) $\in \{5, 10, 15, 20\}$.
+\end{itemize}
+
+\subsubsection{Αποτελέσματα \eng{Grid Search}}
+Ο Πίνακας \ref{tab:dbscan_grid_search} παρουσιάζει αναλυτικά τα αποτελέσματα εκτέλεσης του \eng{DBSCAN} για κάθε συνδυασμό υπερπαραμέτρων. Οι μετρικές \eng{Silhouette}, \eng{Davies-Bouldin} και \eng{ARI} υπολογίζονται αποκλειστικά στα σημεία που ταξινομήθηκαν σε συστάδες, εξαιρώντας τα σημεία θορύβου (\eng{outliers}).
+
+\begin{table}[H]
+\centering
+\caption{Αποτελέσματα \eng{Grid Search} για τον αλγόριθμο \eng{DBSCAN}}
+\label{tab:dbscan_grid_search}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{ccccccc}
+\toprule
+\textbf{\eng{Epsilon (eps)}} & \textbf{\eng{Min Samples}} & \textbf{Συστάδες} & \textbf{Θόρυβος (\%)} & \textbf{\eng{Silhouette} $\uparrow$} & \textbf{\eng{Davies-Bouldin} $\downarrow$} & \textbf{\eng{ARI} $\uparrow$} \\
+\midrule
+1.0 & 5 & 151 & 9.5\% & 0.3192 & 0.6721 & 0.1263 \\
+1.0 & 10 & 89 & 12.9\% & 0.3530 & 0.7160 & 0.1336 \\
+1.0 & 15 & 68 & 15.1\% & 0.3909 & 0.7148 & 0.1396 \\
+1.0 & 20 & 60 & 16.7\% & 0.4038 & 0.7159 & 0.1468 \\
+\midrule
+1.5 & 5 & 92 & 6.2\% & 0.3609 & 0.5658 & 0.1387 \\
+1.5 & 10 & 43 & 8.5\% & 0.3971 & 0.6782 & 0.1441 \\
+1.5 & 15 & 36 & 9.4\% & 0.4455 & 0.6717 & 0.1401 \\
+\textbf{1.5} & \textbf{20} & \textbf{35} & \textbf{10.5\%} & \textbf{0.4540} & \textbf{0.6786} & \textbf{0.1434} \\
+\midrule
+2.0 & 5 & 69 & 4.1\% & 0.3860 & 0.5209 & 0.1170 \\
+2.0 & 10 & 37 & 5.9\% & 0.3963 & 0.6494 & 0.1204 \\
+2.0 & 15 & 25 & 7.0\% & 0.3956 & 0.6389 & 0.1232 \\
+2.0 & 20 & 24 & 7.4\% & 0.4106 & 0.6664 & 0.1243 \\
+\midrule
+2.5 & 5 & 51 & 2.9\% & 0.2132 & 0.5023 & 0.1895 \\
+2.5 & 10 & 23 & 4.3\% & 0.3092 & 0.5589 & 0.1912 \\
+2.5 & 15 & 18 & 5.1\% & 0.3340 & 0.5903 & 0.1955 \\
+2.5 & 20 & 15 & 5.6\% & 0.3251 & 0.5975 & 0.1927 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\subsubsection{Ανάλυση Επίδρασης των Παραμέτρων}
+\begin{itemize}
+    \item \textbf{Επίδραση του \eng{Epsilon (eps)} ($\epsilon$):} Καθώς η τιμή του $\epsilon$ αυξάνεται, η ακτίνα αναζήτησης μεγαλώνει, επιτρέποντας σε περισσότερα σημεία να ικανοποιούν τα κριτήρια γειτονίας. Αυτό οδηγεί σε \textbf{δραστική μείωση του ποσοστού θορύβου} (από $16.7\%$ σε $2.9\%$) και στη συγχώνευση μικρότερων συστάδων σε μεγαλύτερες (ο αριθμός των συστάδων μειώνεται).
+    \item \textbf{Επίδραση του \eng{Min Samples}:} Η αύξηση της παραμέτρου \eng{min\_samples} καθιστά τις απαιτήσεις πυκνότητας για τη δημιουργία συστάδων πιο αυστηρές. Ως αποτέλεσμα, \textbf{αυξάνεται το ποσοστό θορύβου} (καθώς οριακά σημεία απορρίπτονται) και μειώνεται ο συνολικός αριθμός των συστάδων.
+\end{itemize}
+
+\subsubsection{Επιλογή Βέλτιστου Μοντέλου}
+Ως βέλτιστος συνδυασμός επιλέχθηκε ο: \textbf{\eng{eps}=1.5, \eng{min\_samples}=20}. Η επιλογή αυτή εξασφαλίζει μια ισορροπία μεταξύ ενός λογικού ποσοστού θορύβου ($10.5\%$) και ικανοποιητικής ποιότητας ομαδοποίησης με $35$ διακριτές συστάδες.
+\begin{itemize}
+    \item \textbf{\eng{Silhouette Score} (χωρίς θόρυβο):} 0.4540
+    \item \textbf{\eng{Davies-Bouldin Index} (χωρίς θόρυβο):} 0.6786
+    \item \textbf{\eng{ARI} (vs Label, χωρίς θόρυβο):} 0.1434
+\end{itemize}
+
+Η οπτικοποίηση των συστάδων του βέλτιστου \eng{DBSCAN} μοντέλου με χρήση \eng{PCA} εμφανίζεται στο Σχήμα \ref{fig:dbscan_pca_plot}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{plots/dbscan_pca.png}
+    \caption{Οπτικοποίηση αποτελεσμάτων \eng{DBSCAN} (\eng{eps}=1.5, \eng{min\_samples}=20) με \eng{PCA}.}
+    \label{fig:dbscan_pca_plot}
+\end{figure}
+
+\subsection{Συγκριτική Ανάλυση και Συμπεράσματα}
+
+\subsubsection{Σύγκριση Μετρικών των Βέλτιστων Μοντέλων}
+Στον Πίνακα \ref{tab:clustering_final_comparison} συγκρίνονται οι επιδόσεις των βέλτιστων μοντέλων που προέκυψαν από κάθε έναν από τους τρεις αλγορίθμους ομαδοποίησης.
+
+\begin{table}[H]
+\centering
+\caption{Σύγκριτικός Πίνακας Βέλτιστων Μοντέλων Ομαδοποίησης}
+\label{tab:clustering_final_comparison}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Αλγόριθμος} & \textbf{\eng{Silhouette Score} $\uparrow$} & \textbf{\eng{Davies-Bouldin} $\downarrow$} & \textbf{\eng{ARI} $\uparrow$} & \textbf{Συστάδες} \\
+\midrule
+\textbf{\eng{K-Means} ($k=2$)} & 0.5266 & 1.7520 & 0.3725 & 2 \\
+\textbf{\eng{Hierarchical} (\eng{complete}, $k=2$)} & \textbf{0.9253} & \textbf{0.0510} & -0.0004 & 2 \\
+\textbf{\eng{DBSCAN} (\eng{eps}=1.5, \eng{min\_pts}=20)} & 0.4540 & 0.6786 & 0.1434 & 35 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+Στο Σχήμα \ref{fig:clustering_visual_comparison} εμφανίζονται η κατανομή των πραγματικών κλάσεων (\eng{ground truth}) και η γραφική σύγκριση των μετρικών ποιότητας για τους τρεις αλγορίθμους.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{plots/clustering_ground_truth.png}
+        \caption{Πραγματικές Κλάσεις (\eng{Ground Truth})}
+        \label{fig:gt_plot}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{plots/clustering_comparison.png}
+        \caption{Σύγκριση Μετρικών}
+        \label{fig:metrics_comparison_plot}
+    \end{subfigure}
+    \caption{Σύγκριση της κατανομής \eng{ground truth} στον χώρο \eng{PCA} και των μετρικών αξιολόγησης των αλγορίθμων.}
+    \label{fig:clustering_visual_comparison}
+\end{figure}
+
+\subsubsection{Ερμηνεία Μετρικών σε σχέση με τη μεταβλητή \eng{Label}}
+\begin{itemize}
+    \item \textbf{\eng{K-Means} και Ιεραρχική (\eng{Ward}):} Και οι δύο αλγόριθμοι συγκλίνουν στο $k=2$ ως τη βέλτιστη φυσική ομαδοποίηση των δεδομένων. Με βάση την τιμή του \eng{Adjusted Rand Index} (\eng{ARI} $\approx 0.37 - 0.38$), παρατηρείται μια μέτρια συσχέτιση με τις πραγματικές κλάσεις. Δεδομένου ότι το σύνολο δεδομένων αποτελείται κατά $\approx 83\%$ από κανονική κίνηση (\eng{BENIGN}) και κατά $\approx 17\%$ από επιθέσεις, οι δύο συστάδες που σχηματίζονται διαχωρίζουν ικανοποιητικά την κανονική κίνηση από τις επιθέσεις (δυαδικός διαχωρισμός). Ωστόσο, αποτυγχάνουν να διαχωρίσουν τις 15 επιμέρους κατηγορίες επιθέσεων, καθώς πολλές διαφορετικές επιθέσεις εμφανίζουν πανομοιότυπα χαρακτηριστικά δικτυακής συμπεριφοράς.
+    \item \textbf{\eng{DBSCAN}:} Λόγω της πυκνοτικής του φύσης, ο \eng{DBSCAN} εντοπίζει πολλές μικρές και εξαιρετικά συμπαγείς συστάδες δικτυακής κίνησης (π.χ. συγκεκριμένους τύπους πακέτων ή επαναλαμβανόμενες επιθέσεις σάρωσης θυρών), ενώ απορρίπτει ως θόρυβο τις μη επαναλαμβανόμενες ανωμαλίες. Η χαμηλή τιμή του \eng{ARI} ($0.1434$) οφείλεται στο ότι ο αλγόριθμος διασπά τις πραγματικές κλάσεις σε δεκάδες μικρότερα clusters, αλλά προσφέρει εξαιρετικά χαμηλό \eng{Davies-Bouldin Index} ($0.6786$), που υποδηλώνει πολύ καλό τοπικό διαχωρισμό.
+\end{itemize}
+
+\subsubsection{Τελικά Συμπεράσματα}
+\begin{itemize}
+    \item \textbf{\eng{K-Means}:} Παραμένει η πιο αποδοτική και εύκολα κλιμακώσιμη μέθοδος για μεγάλα σύνολα δεδομένων, προσφέροντας έναν ικανοποιητικό δυαδικό διαχωρισμό (\eng{BENIGN} \eng{vs} \eng{ATTACK}).
+    \item \textbf{Ιεραρχική Ομαδοποίηση:} Παρέχει εξαιρετικά χρήσιμη εποπτική εικόνα μέσω του δενδρογράμματος για τη δομή των δεδομένων, αλλά περιορίζεται δραστικά από την τετραγωνική υπολογιστική της πολυπλοκότητα. Η μέθοδος σύνδεσης \eng{ward} προσφέρει την πιο ρεαλιστική ομαδοποίηση σε σχέση με το \eng{ground truth}.
+    \item \textbf{\eng{DBSCAN}:} Αποτελεί ένα εξαιρετικά πολύτιμο εργαλείο για την ανίχνευση ανωμαλιών (\eng{anomaly/outlier detection}) και την ανακάλυψη πολύ εξειδικευμένων, πυκνών μοτίβων δικτυακής κίνησης, χωρίς να απαιτείται η εκ των προτέρων γνώση του αριθμού των συστάδων ($k$).
+\end{itemize}
+
+\newpage
+% ==========================================
+%   ΓΕΝΙΚΑ ΣΥΜΠΕΡΑΣΜΑΤΑ
+% ==========================================
+\section{Γενικά Συμπεράσματα}
+Η παρούσα εργαστηριακή άσκηση κάλυψε όλο τον κύκλο ζωής της ανάλυσης δεδομένων δικτυακής ασφάλειας, από την αρχική επεξεργασία έως την ανάπτυξη επιβλεπόμενων και μη-επιβλεπόμενων μοντέλων:
+\begin{itemize}
+    \item \textbf{Διερευνητική Ανάλυση (\eng{EDA}):} Ανέδειξε την έντονη ανισορροπία των κλάσεων και την ύπαρξη ακραίων τιμών (\eng{outliers}), στοιχεία που αποτελούν φυσιολογικά χαρακτηριστικά της ανώμαλης δικτυακής κίνησης. Η σωστή κανονικοποίηση και η μείωση της πολυσυγγραμμικότητας με συσχέτιση \eng{Pearson} αποδείχθηκαν κρίσιμα βήματα για τη σταθερότητα των μοντέλων.
+    \item \textbf{Ταξινόμηση (\eng{Classification}):} Τα επιβλεπόμενα μοντέλα (ιδίως το \eng{Random Forest} και τα \eng{Decision Trees}) πέτυχαν εξαιρετικές επιδόσεις στην ανίχνευση των επιθέσεων, με τιμές \eng{F1-Score} που πλησιάζουν το $99.7\%$. Η σύγκριση των σεναρίων εκπαίδευσης έδειξε ότι η εισαγωγή \eng{k-fold cross-validation} προσφέρει πιο αξιόπιστη εκτίμηση της γενίκευσης του μοντέλου, αποφεύγοντας το \eng{overfitting}.
+    \item \textbf{Ομαδοποίηση (\eng{Clustering}):} Η εφαρμογή μη-επιβλεπόμενων αλγορίθμων επέτρεψε την ανακάλυψη φυσικών ομάδων στα δεδομένα χωρίς τη χρήση των \eng{labels}. Ο \eng{K-Means} και η Ιεραρχική ομαδοποίηση (με \eng{Ward Linkage}) αποκάλυψαν μια βασική δυαδική δομή (κανονική κίνηση έναντι επιθέσεων), ενώ ο \eng{DBSCAN} ξεχώρισε για την ικανότητά του να εντοπίζει εξαιρετικά πυκνές, συγκεκριμένες συμπεριφορές επιθέσεων και να απομονώνει τον θόρυβο.
+\end{itemize}
+Συνολικά, ο συνδυασμός επιβλεπόμενων και μη-επιβλεπόμενων τεχνικών παρέχει ένα ολοκληρωμένο πλαίσιο για την ασφάλεια δικτύων, επιτρέποντας τόσο την ακριβή ταξινόμηση γνωστών απειλών όσο και την ανακάλυψη νέων, προηγμένων ανωμαλιών.
 
 \end{document}
 
