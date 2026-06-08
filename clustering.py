@@ -179,7 +179,10 @@ for method in linkage_methods:
     hier_labels = agg.fit_predict(X_hier)
 
     # Υπολογισμός μετρικών
-    sil_hier = silhouette_score(X_hier, hier_labels, sample_size=3000, random_state=42)
+    try:
+        sil_hier = silhouette_score(X_hier, hier_labels, sample_size=3000, random_state=42)
+    except ValueError:
+        sil_hier = silhouette_score(X_hier, hier_labels)
     dbi_hier = davies_bouldin_score(X_hier, hier_labels)
     ari_hier = adjusted_rand_score(y_hier, hier_labels)
     
@@ -230,7 +233,7 @@ dbscan_runs = []
 print("Έναρξη Grid Search για DBSCAN...")
 for eps in eps_grid:
     for min_samples in min_samples_grid:
-        db = DBSCAN(eps=eps, min_samples=min_samples, n_jobs=-1)
+        db = DBSCAN(eps=eps, min_samples=min_samples)
         labels = db.fit_predict(X_db)
         
         n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
@@ -241,8 +244,14 @@ for eps in eps_grid:
         if n_clusters >= 2:
             mask_valid = labels != -1
             if mask_valid.sum() > 100:
-                sil = silhouette_score(X_db[mask_valid], labels[mask_valid],
-                                       sample_size=min(3000, mask_valid.sum()), random_state=42)
+                try:
+                    sil = silhouette_score(X_db[mask_valid], labels[mask_valid],
+                                           sample_size=min(3000, mask_valid.sum()), random_state=42)
+                except ValueError:
+                    try:
+                        sil = silhouette_score(X_db[mask_valid], labels[mask_valid])
+                    except ValueError:
+                        sil = float('nan')
                 dbi = davies_bouldin_score(X_db[mask_valid], labels[mask_valid])
                 ari = adjusted_rand_score(y_db[mask_valid], labels[mask_valid])
         
@@ -323,151 +332,3 @@ plt.tight_layout()
 plt.savefig(os.path.join(plots_dir, "clustering_comparison.png"), dpi=150)
 plt.close()
 print("  → Αποθηκεύτηκε: plots/clustering_comparison.png")
-
-# ============================================================
-# ΒΗΜΑ 6: Αναφορά Report_Q3.md
-# ============================================================
-print("\n=== Βήμα 6: Παραγωγή Report_Q3.md ===")
-
-with open(os.path.join(output_dir, "Report_Q3.md"), "w", encoding="utf-8") as rf:
-    rf.write("# Αναφορά Ερωτήματος 3 – Ομαδοποίηση (Clustering)\n\n")
-    rf.write("Αυτή η αναφορά παρουσιάζει τα αποτελέσματα εφαρμογής αλγορίθμων μη-επιβλεπόμενης μάθησης "
-             "(unsupervised learning) στο σύνολο δεδομένων **CIC-IDS-2017**, "
-             "με στόχο την ανακάλυψη φυσικών ομαδοποιήσεων στη δικτυακή κίνηση.\n\n")
-
-    rf.write("## 1. Προεπεξεργασία Δεδομένων\n\n")
-    rf.write("### 1.1 Σύνολο Δεδομένων\n")
-    rf.write("Χρησιμοποιήθηκε το καθαρισμένο δείγμα `cleaned_sampled_data.csv` (100.000 εγγραφές, 48 χαρακτηριστικά). "
-             "Σε αντίθεση με το Ερώτημα 2, η ομαδοποίηση πραγματοποιήθηκε **χωρίς τη χρήση της μεταβλητής Label** "
-             "— η Label χρησιμοποιείται μόνο για εκ των υστέρων αξιολόγηση (ground truth comparison).\n\n")
-    rf.write("### 1.2 Κανονικοποίηση\n")
-    rf.write("Εφαρμόστηκε `StandardScaler` στο σύνολο των χαρακτηριστικών, καθώς οι αλγόριθμοι ομαδοποίησης "
-             "(K-Means, DBSCAN) είναι εξαιρετικά ευαίσθητοι στην κλίμακα των δεδομένων.\n\n")
-    rf.write("### 1.3 Μείωση Διαστασιμότητας (PCA)\n")
-    rf.write(f"Για την οπτικοποίηση εφαρμόστηκε PCA με 2 components, που εξηγεί το "
-             f"**{pca_vis.explained_variance_ratio_.sum()*100:.2f}%** της συνολικής διακύμανσης. "
-             f"Η PCA χρησιμοποιείται **μόνο για οπτικοποίηση** — η ομαδοποίηση γίνεται στον πλήρη χώρο 48 διαστάσεων.\n\n")
-    rf.write("### 1.4 Μέγεθος Dataset ανά Αλγόριθμο\n")
-    rf.write("| Αλγόριθμος | Δείγματα | Λόγος Περιορισμού |\n|:---|:---:|:---|\n")
-    rf.write(f"| K-Means | 100.000 | Αποδοτικός, κλιμακώνεται καλά |\n")
-    rf.write(f"| Hierarchical (Ward/Complete/Average) | {HIER_N:,} | Απαιτεί O(N²) μνήμη — αδύνατο σε 100K |\n")
-    rf.write(f"| DBSCAN | {DBSCAN_N:,} | Ισορροπία ταχύτητας/αντιπροσωπευτικότητας |\n\n")
-
-    rf.write("## 2. K-Means Clustering\n\n")
-    rf.write("### 2.1 Επιλογή Βέλτιστου k\n")
-    rf.write("Χρησιμοποιήθηκαν δύο συμπληρωματικές μέθοδοι για την επιλογή του βέλτιστου αριθμού clusters:\n\n")
-    rf.write("* **Elbow Method:** Αναζήτηση της γωνίας (elbow) στη γραφική απεικόνιση του SSE (inertia) "
-             "συναρτήσει του k. Η απότομη μείωση σταματά, υποδεικνύοντας το βέλτιστο k.\n")
-    rf.write("* **Silhouette Score:** Μέτρο συνεκτικότητας και διαχωρισμού των clusters. "
-             "Τιμές κοντά στο 1 = καλά ξεχωριστά clusters. Επιλέχθηκε το k με τη μέγιστη τιμή.\n\n")
-    rf.write(f"Τα γραφήματα αποθηκεύτηκαν στο `plots/kmeans_elbow_silhouette.png`.\n")
-    rf.write(f"**Βέλτιστο k = {best_k}** (μέγιστο Silhouette Score).\n\n")
-    rf.write("### 2.2 Υλοποίηση\n")
-    rf.write(f"* **Αλγόριθμος αρχικοποίησης:** `k-means++` (αποφυγή κακής τυχαίας αρχικοποίησης)\n")
-    rf.write(f"* **n_init=10:** Εκτέλεση 10 φορών με διαφορετικά αρχικά centroids, επιλογή καλύτερου\n")
-    rf.write(f"* **max_iter=300:** Μέγιστος αριθμός επαναλήψεων σύγκλισης\n\n")
-    rf.write("### 2.3 Αποτελέσματα\n")
-    rf.write(f"| Μετρική | Τιμή |\n|:---|:---:|\n")
-    rf.write(f"| Silhouette Score | {sil_km:.4f} |\n")
-    rf.write(f"| Davies-Bouldin Index | {dbi_km:.4f} |\n")
-    rf.write(f"| Adjusted Rand Index (vs Label) | {ari_km:.4f} |\n\n")
-    rf.write("Η οπτικοποίηση PCA αποθηκεύτηκε στο `plots/kmeans_pca.png`.\n\n")
-
-    rf.write("## 3. Ιεραρχική Ομαδοποίηση (Hierarchical Clustering) – Σύγκριση Μεθόδων Σύνδεσης\n\n")
-    rf.write("### 3.1 Μέθοδος και Διερεύνηση Linkages\n")
-    rf.write(f"Χρησιμοποιήθηκε **Agglomerative Clustering** (bottom-up) για $k={best_k}$. "
-             f"Λόγω της τετραγωνικής πολυπλοκότητας $O(N^2)$, η ανάλυση περιορίστηκε σε {HIER_N:,} δείγματα. "
-             f"Πραγματοποιήθηκε πειραματισμός με τρεις διαφορετικές μεθόδους σύνδεσης (linkage methods):\n\n")
-    rf.write("* **Ward:** Ελαχιστοποιεί τη συνολική διακύμανση εντός των clusters. Τείνει να δημιουργεί clusters παρόμοιου μεγέθους.\n")
-    rf.write("* **Complete Linkage:** Συνδέει clusters με βάση τη μέγιστη απόσταση μεταξύ των σημείων τους.\n")
-    rf.write("* **Average Linkage:** Συνδέει clusters με βάση τη μέση απόσταση μεταξύ όλων των ζευγών σημείων τους.\n\n")
-    
-    rf.write("### 3.2 Αποτελέσματα Σύγκρισης Linkage Methods\n\n")
-    rf.write("| Μέθοδος Σύνδεσης | Silhouette Score ↑ | Davies-Bouldin Index ↓ | Adjusted Rand Index (vs Label) ↑ |\n")
-    rf.write("|:---|:---:|:---:|:---:|\n")
-    for method in linkage_methods:
-        res = hier_results[method]
-        rf.write(f"| **{method}** | {res['sil']:.4f} | {res['dbi']:.4f} | {res['ari']:.4f} |\n")
-    rf.write("\n")
-    
-    rf.write("### 3.3 Dendrograms & PCA Plots\n")
-    rf.write("* Τα δενδρογράμματα αποθηκεύτηκαν στα αρχεία:\n")
-    for method in linkage_methods:
-        rf.write(f"  * `plots/hierarchical_dendrogram_{method}.png`\n")
-    rf.write("* Οι αντίστοιχες οπτικοποιήσεις PCA αποθηκεύτηκαν στα:\n")
-    for method in linkage_methods:
-        rf.write(f"  * `plots/hierarchical_pca_{method}.png`\n")
-    rf.write(f"\n**Παρατήρηση:** Η μέθοδος **{best_hier_method}** παρουσίασε το υψηλότερο Silhouette Score ({sil_hier_best:.4f}) "
-             f"και χρησιμοποιείται ως η βέλτιστη εκπροσώπηση της Ιεραρχικής ομαδοποίησης.\n\n")
-
-    rf.write("## 4. DBSCAN – Διερεύνηση Υπερπαραμέτρων (Grid Search)\n\n")
-    rf.write("### 4.1 Μεθοδολογία Grid Search\n")
-    rf.write("Για τον αλγόριθμο DBSCAN πραγματοποιήθηκε συστηματικός πειραματισμός σε δείγμα 20.000 παρατηρήσεων "
-             "με τις ακόλουθες υπερπαράμετρους:\n")
-    rf.write("* **Epsilon (eps):** Ακτίνα γειτνίασης $\in \{1.0, 1.5, 2.0, 2.5\}$\n")
-    rf.write("* **Min Samples (min_samples):** Ελάχιστος αριθμός σημείων $\in \{5, 10, 15, 20\}$\n\n")
-    rf.write("Καταγράφεται πώς οι παράμετροι επηρεάζουν τον αριθμό των συστάδων που προκύπτουν, το ποσοστό θορύβου, "
-             "καθώς και τις μετρικές ποιότητας των συστάδων (στα σημεία εκτός θορύβου).\n\n")
-    
-    rf.write("### 4.2 Αποτελέσματα Grid Search\n\n")
-    rf.write("| Epsilon (eps) | Min Samples | Clusters | Θόρυβος (%) | Silhouette ↑ | Davies-Bouldin ↓ | ARI (vs Label) ↑ |\n")
-    rf.write("|:---:|:---:|:---:|:---:|:---:|:---:|:---:|\n")
-    for run in dbscan_runs:
-        sil_str = f"{run['sil']:.4f}" if not np.isnan(run['sil']) else "N/A"
-        dbi_str = f"{run['dbi']:.4f}" if not np.isnan(run['dbi']) else "N/A"
-        ari_str = f"{run['ari']:.4f}" if not np.isnan(run['ari']) else "N/A"
-        rf.write(f"| {run['eps']:.1f} | {run['min_samples']} | {run['n_clusters']} | {run['noise_pct']:.1f}% | {sil_str} | {dbi_str} | {ari_str} |\n")
-    rf.write("\n")
-    
-    rf.write("### 4.3 Ανάλυση Επίδρασης των Παραμέτρων\n")
-    rf.write("* **Επίδραση του Epsilon (eps):** Καθώς το `eps` αυξάνεται, η ακτίνα γειτνίασης μεγαλώνει, "
-             "με αποτέλεσμα περισσότερα σημεία να θεωρούνται core ή border points. Αυτό οδηγεί σε **δραστική μείωση του θορύβου** "
-             "και συγχώνευση μικρών συστάδων σε μεγαλύτερες. Αντίθετα, μικρές τιμές `eps` (π.χ. 1.0) αφήνουν μεγάλο ποσοστό "
-             "σημείων ως θόρυβο.\n")
-    rf.write("* **Επίδραση του Min Samples:** Αυξάνοντας το `min_samples`, οι απαιτήσεις πυκνότητας γίνονται πιο αυστηρές. "
-             "Αυτό οδηγεί σε **αύξηση του θορύβου** και λιγότερα clusters, καθώς πολλά οριακά σημεία απορρίπτονται.\n\n")
-             
-    rf.write(f"### 4.4 Επιλογή Βέλτιστου Μοντέλου\n")
-    rf.write(f"Ως βέλτιστος συνδυασμός επιλέχθηκε ο: **eps={eps_db_best:.1f}, min_samples={min_samples_db_best}** "
-             f"ο οποίος εντόπισε **{n_clusters_db_best}** clusters με ποσοστό θορύβου **{noise_pct_db_best:.1f}%**.\n")
-    rf.write(f"* Silhouette Score (χωρίς θόρυβο): **{sil_db_best:.4f}**\n")
-    rf.write(f"* Davies-Bouldin Index (χωρίς θόρυβο): **{dbi_db_best:.4f}**\n")
-    rf.write(f"* Adjusted Rand Index (vs Label, χωρίς θόρυβο): **{ari_db_best:.4f}**\n\n")
-    rf.write("Η οπτικοποίηση PCA αποθηκεύτηκε στο `plots/dbscan_pca.png`.\n\n")
-
-    rf.write("## 5. Συγκριτική Ανάλυση και Συμπεράσματα (Βέλτιστα Μοντέλα)\n\n")
-    rf.write("### 5.1 Σύγκριση Μετρικών\n\n")
-    rf.write("| Αλγόριθμος | Silhouette ↑ | Davies-Bouldin ↓ | ARI ↑ | Clusters |\n")
-    rf.write("|:---|:---:|:---:|:---:|:---:|\n")
-    rf.write(f"| **K-Means (k={best_k})** | {sil_km:.4f} | {dbi_km:.4f} | {ari_km:.4f} | {best_k} |\n")
-    rf.write(f"| **Hierarchical ({best_hier_method}, k={best_k})** | {sil_hier_best:.4f} | {dbi_hier_best:.4f} | {ari_hier_best:.4f} | {best_k} |\n")
-    
-    sil_str = f"{sil_db_best:.4f}" if not np.isnan(sil_db_best) else "N/A"
-    dbi_str = f"{dbi_db_best:.4f}" if not np.isnan(dbi_db_best) else "N/A"
-    ari_str = f"{ari_db_best:.4f}" if not np.isnan(ari_db_best) else "N/A"
-    rf.write(f"| **DBSCAN (eps={eps_db_best:.1f}, min_pts={min_samples_db_best})** | {sil_str} | {dbi_str} | {ari_str} | {n_clusters_db_best} |\n\n")
-
-    rf.write("### 5.2 Ερμηνεία Μετρικών σε σχέση με τη μεταβλητή Label\n")
-    rf.write("* **K-Means και Ιεραρχική:** Και οι δύο αλγόριθμοι συγκλίνουν στο $k=2$ ως τη βέλτιστη φυσική ομαδοποίηση. "
-             "Μελετώντας το **Adjusted Rand Index (ARI ≈ 0.37 - 0.38)**, παρατηρούμε μια μέτρια συσχέτιση με τις πραγματικές κλάσεις. "
-             "Στην πράξη, επειδή το dataset αποτελείται κατά ~83% από κανονική κίνηση (BENIGN) και ~17% από επιθέσεις, οι δύο "
-             "συσταδούλες που σχηματίζονται διαχωρίζουν σε μεγάλο βαθμό την κανονική κίνηση από τις επιθέσεις (δυαδικός διαχωρισμός), "
-             "αλλά αποτυγχάνουν να ξεχωρίσουν τις 15 επιμέρους λεπτομερείς κατηγορίες επιθέσεων, καθώς πολλές επιθέσεις παρουσιάζουν "
-             "παρόμοια δικτυακή συμπεριφορά.\n")
-    rf.write("* **DBSCAN:** Ο DBSCAN, λόγω της πυκνοτικής του φύσης, καταφέρνει να εντοπίσει πολλές μικρές, "
-             "συμπαγείς συστάδες δικτυακής κίνησης (π.χ. πολύ συγκεκριμένα είδη πακέτων ή επιθέσεων σάρωσης θυρών), "
-             "ενώ απορρίπτει ως θόρυβο (outliers) τις μη-επαναλαμβανόμενες ανωμαλίες. Το χαμηλό ARI του DBSCAN "
-             "οφείλεται στο ότι διασπά τις πραγματικές κλάσεις σε δεκάδες μικρότερα clusters, αλλά προσφέρει εξαιρετικά "
-             "χαμηλό Davies-Bouldin Index (υψηλός τοπικός διαχωρισμός).\n\n")
-
-    rf.write("### 5.3 Τελικά Συμπεράσματα\n")
-    rf.write(f"* **K-Means:** Παραμένει ο πιο αποδοτικός αλγόριθμος για μεγάλα δεδομένα, δίνοντας μια καλή γενική "
-             f"εικόνα του δυαδικού διαχωρισμού (BENIGN vs ATTACK).\n")
-    rf.write(f"* **Ιεραρχική Ομαδοποίηση:** Η μέθοδος σύνδεσης **{best_hier_method}** παρήγαγε το καλύτερο "
-             f"αποτέλεσμα, επιβεβαιώνοντας τη δομή δύο κύριων κλάδων στο δενδρόγραμμα.\n")
-    rf.write(f"* **DBSCAN:** Αποδεικνύεται πολύτιμος για τον εντοπισμό ανώμαλης συμπεριφοράς (outliers/θόρυβος) "
-             f"και για την ανακάλυψη μικρών, εξαιρετικά πυκνών τύπων κίνησης, χωρίς την ανάγκη εκ των προτέρων "
-             f"γνώσης του αριθμού των συστάδων.\n")
-
-print("Η αναφορά Report_Q3.md δημιουργήθηκε με επιτυχία.")
-print("=== Ερώτημα 3 ολοκληρώθηκε με επιτυχία! ===")

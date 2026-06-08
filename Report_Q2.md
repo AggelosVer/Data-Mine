@@ -58,7 +58,7 @@
 
 | Αλγόριθμος | Βέλτιστες Παράμετροι | Val F1 (W) |
 |:---|:---|:---:|
-| Logistic Regression | C=10.0 | 0.9186 |
+| Logistic Regression | C=10.0 | 0.9177 |
 | Decision Tree | max_depth=15, criterion=entropy | 0.9969 |
 | Random Forest | n_estimators=100, max_depth=20 | 0.9977 |
 
@@ -66,7 +66,7 @@
 
 | Αλγόριθμος | Accuracy | Precision (W) | Recall (W) | F1 (W) | F1 (Macro) |
 |:---|:---:|:---:|:---:|:---:|:---:|
-| Logistic Regression | 0.8900 | 0.9633 | 0.8900 | 0.9195 | 0.5404 |
+| Logistic Regression | 0.8871 | 0.9622 | 0.8871 | 0.9171 | 0.5077 |
 | Decision Tree | 0.9967 | 0.9968 | 0.9967 | 0.9967 | 0.8762 |
 | Random Forest | 0.9975 | 0.9975 | 0.9975 | 0.9974 | 0.8935 |
 
@@ -86,7 +86,7 @@
 
 | Αλγόριθμος | Βέλτιστες Παράμετροι | CV F1 (W) |
 |:---|:---|:---:|
-| Logistic Regression | C=10.0 | 0.9019 |
+| Logistic Regression | C=10.0 | 0.9035 |
 | Decision Tree | criterion=entropy, max_depth=15 | 0.9966 |
 | Random Forest | max_depth=20, n_estimators=100 | 0.9972 |
 
@@ -94,7 +94,7 @@
 
 | Αλγόριθμος | Accuracy | Precision (W) | Recall (W) | F1 (W) | F1 (Macro) |
 |:---|:---:|:---:|:---:|:---:|:---:|
-| Logistic Regression | 0.8601 | 0.9657 | 0.8601 | 0.9027 | 0.4672 |
+| Logistic Regression | 0.8624 | 0.9661 | 0.8624 | 0.9043 | 0.4658 |
 | Decision Tree | 0.9963 | 0.9969 | 0.9963 | 0.9966 | 0.8640 |
 | Random Forest | 0.9975 | 0.9975 | 0.9975 | 0.9974 | 0.8856 |
 
