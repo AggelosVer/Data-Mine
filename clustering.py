@@ -100,33 +100,79 @@ for k in k_range:
         silhouettes.append((k, sil))
     print(f"  k={k:2d} → Inertia: {km.inertia_:.0f}" + (f" | Sil: {sil:.4f}" if k <= 16 else ""))
 
-# Elbow Plot
+# Εύρεση elbow μέσω μεθόδου μέγιστης κάθετης απόστασης (Kneedle Algorithm)
+k_list = np.array(list(k_range), dtype=float)
+inertias_arr = np.array(inertias, dtype=float)
+
+# Κανονικοποίηση αξόνων σε [0, 1] ώστε να μην κυριαρχεί ο ένας άξονας
+k_norm = (k_list - k_list[0]) / (k_list[-1] - k_list[0])
+inertia_norm = (inertias_arr - inertias_arr[-1]) / (inertias_arr[0] - inertias_arr[-1])
+
+# Κάθετη απόσταση κάθε σημείου από τη γραμμή (πρώτο → τελευταίο σημείο)
+line_vec = np.array([k_norm[-1] - k_norm[0], inertia_norm[-1] - inertia_norm[0]])
+distances = []
+for i in range(len(k_list)):
+    point_vec = np.array([k_norm[i] - k_norm[0], inertia_norm[i] - inertia_norm[0]])
+    dist = abs(np.cross(line_vec, point_vec)) / np.linalg.norm(line_vec)
+    distances.append(dist)
+
+elbow_idx = np.argmax(distances)
+elbow_k = int(k_list[elbow_idx])
+print(f"\nElbow Point (Kneedle Algorithm): k={elbow_k}")
+
+# Συνδυασμός Elbow + Silhouette:
+# Ο elbow ορίζει το ελάχιστο λογικό k (κάτω από αυτό χάνεται πληροφορία).
+# Από εκεί και πάνω, επιλέγουμε το k με το μέγιστο Silhouette Score.
+sil_dict = dict(silhouettes)
+silhouettes_above_elbow = [(k, s) for k, s in silhouettes if k >= elbow_k]
+best_k, best_sil = max(silhouettes_above_elbow, key=lambda x: x[1])
+print(f"Βέλτιστο k (μέγιστο Silhouette για k≥{elbow_k}): k={best_k} (Sil={best_sil:.4f})")
+
+sil_at_elbow = sil_dict.get(elbow_k, None)
+
+# ---- Elbow + Silhouette Plot (ενημερωμένο) ----
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+
+# Αριστερό: Elbow Method
 ax1.plot(list(k_range), inertias, 'bo-', markersize=5)
+ax1.scatter([elbow_k], [inertias[elbow_idx]], c='orange', s=80, zorder=5, marker='*',
+            label=f'Elbow (k={elbow_k})')
+ax1.axvline(x=elbow_k, color='orange', linestyle='--', alpha=0.5)
+best_k_inertia_idx = list(k_range).index(best_k)
+ax1.scatter([best_k], [inertias[best_k_inertia_idx]], c='red', s=80, zorder=5, marker='D',
+            label=f'Βέλτιστο k={best_k}')
+ax1.axvline(x=best_k, color='red', linestyle='--', alpha=0.5)
+ax1.axvline(x=n_true_classes, color='green', linestyle='--', alpha=0.5,
+            label=f'Πραγματικές κλάσεις (k={n_true_classes})')
 ax1.set_xlabel('Αριθμός Clusters (k)', fontsize=11)
 ax1.set_ylabel('Inertia (SSE)', fontsize=11)
 ax1.set_title('Elbow Method για K-Means', fontsize=12)
+ax1.legend(fontsize=9)
 ax1.grid(True, alpha=0.3)
 
+# Δεξί: Silhouette Score
 sil_k = [s[0] for s in silhouettes]
 sil_v = [s[1] for s in silhouettes]
 ax2.plot(sil_k, sil_v, 'rs-', markersize=5)
 ax2.axvline(x=n_true_classes, color='green', linestyle='--', alpha=0.7,
             label=f'Πραγματικές κλάσεις (k={n_true_classes})')
+ax2.axvline(x=elbow_k, color='orange', linestyle='--', alpha=0.5,
+            label=f'Elbow (k={elbow_k})')
+ax2.scatter([best_k], [best_sil], c='red', s=80, zorder=5, marker='D',
+            label=f'Βέλτιστο k={best_k} (Sil={best_sil:.2f})')
 ax2.set_xlabel('Αριθμός Clusters (k)', fontsize=11)
 ax2.set_ylabel('Silhouette Score', fontsize=11)
 ax2.set_title('Silhouette Score ανά k', fontsize=12)
 ax2.legend(fontsize=9)
 ax2.grid(True, alpha=0.3)
+
 plt.suptitle('K-Means: Επιλογή Βέλτιστου k', fontsize=13, fontweight='bold')
 plt.tight_layout()
 plt.savefig(os.path.join(plots_dir, "kmeans_elbow_silhouette.png"), dpi=150)
 plt.close()
 print("  → Αποθηκεύτηκε: plots/kmeans_elbow_silhouette.png")
 
-# Βέλτιστο k = αυτό με το μέγιστο silhouette
-best_k = max(silhouettes, key=lambda x: x[1])[0]
-print(f"\nΒέλτιστο k (μέγιστο Silhouette) = {best_k}")
+print(f"\nΒέλτιστο k (Elbow + Silhouette) = {best_k}")
 print(f"Εφαρμογή K-Means με k={best_k} στο πλήρες dataset...")
 
 km_final = KMeans(n_clusters=best_k, init='k-means++', n_init=10, random_state=42, max_iter=300)

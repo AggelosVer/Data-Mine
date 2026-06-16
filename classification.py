@@ -20,6 +20,7 @@ from sklearn.metrics import (
 
 sys.stdout.reconfigure(encoding='utf-8')
 warnings.filterwarnings('ignore')
+os.environ["PYTHONWARNINGS"] = "ignore"
 
 output_dir = os.path.dirname(os.path.abspath(__file__))
 plots_dir  = os.path.join(output_dir, "plots")
