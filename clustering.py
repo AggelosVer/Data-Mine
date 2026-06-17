@@ -17,7 +17,7 @@ from scipy.cluster.hierarchy import dendrogram, linkage
 sys.stdout.reconfigure(encoding='utf-8')
 warnings.filterwarnings('ignore')
 
-output_dir = r"C:\Users\user\Documents\GitHub\Data Mine"
+output_dir = os.path.dirname(os.path.abspath(__file__))
 plots_dir  = os.path.join(output_dir, "plots")
 os.makedirs(plots_dir, exist_ok=True)
 
