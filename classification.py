@@ -26,22 +26,19 @@ output_dir = os.path.dirname(os.path.abspath(__file__))
 plots_dir  = os.path.join(output_dir, "plots")
 os.makedirs(plots_dir, exist_ok=True)
 
-# ============================================================
 # ΒΗΜΑ 1: Φόρτωση Δεδομένων
-# ============================================================
 print("=== Βήμα 1: Φόρτωση Δεδομένων ===")
 df = pd.read_csv(os.path.join(output_dir, "cleaned_sampled_data.csv"))
 print(f"Dataset: {df.shape[0]:,} γραμμές, {df.shape[1]} στήλες")
 
-# ============================================================
+
 # ΒΗΜΑ 2: Προεπεξεργασία
-# ============================================================
 print("\n=== Βήμα 2: Προεπεξεργασία ===")
 
 le = LabelEncoder()
 df['Label_enc'] = le.fit_transform(df['Label'])
 
-# Αφαίρεση κλάσεων με < 2 δείγματα (δεν επιτρέπουν stratified split)
+# Αφαίρεση κλάσεων με < 2 δείγματα
 counts = df['Label'].value_counts()
 valid  = counts[counts >= 2].index
 removed = counts[counts < 2].index.tolist()
@@ -60,9 +57,8 @@ print(f"Κλάσεις ({len(class_names)}): {list(class_names)}")
 X_all = df.drop(columns=['Label', 'Label_enc']).values
 y_all = df['Label_enc'].values
 
-# ============================================================
+
 # ΒΗΜΑ 3: Διαχωρισμός Δεδομένων
-# ============================================================
 print("\n=== Βήμα 3: Διαχωρισμός Δεδομένων ===")
 
 # --- Σενάριο Α: Train(70%) / Val(15%) / Test(15%) ---
@@ -87,12 +83,10 @@ X_train_B_sc = scaler_B.fit_transform(X_train_B)
 X_test_B_sc  = scaler_B.transform(X_test_B)
 
 # Μικρό υποσύνολο για γρήγορο Grid Search (~20K) -- μετά refit στο πλήρες train
-# (refit=True στο GridSearchCV το κάνει αυτόματα στο πλήρες train)
 print(f"Σενάριο Β → Train: {len(y_train_B):,} | Test: {len(y_test_B):,}")
 
-# ============================================================
+
 # Βοηθητικές Συναρτήσεις
-# ============================================================
 def compute_metrics(y_true, y_pred):
     return {
         'Accuracy':         round(accuracy_score(y_true, y_pred), 4),
@@ -125,9 +119,7 @@ def plot_cm(y_true, y_pred, class_names, title, filename):
 results_A = {}
 results_B = {}
 
-# ============================================================
 # ΒΗΜΑ 4Α: Σενάριο Α – Manual Grid Search (Train/Val/Test)
-# ============================================================
 print("\n=== Βήμα 4Α: Σενάριο Α - Manual Grid Search ===")
 
 # ---- Logistic Regression ----
@@ -193,9 +185,9 @@ print(f"  ★ {best_p} | Test F1(W): {results_A['Random Forest']['test_metrics']
 plot_cm(y_test_A, pred, class_names,
         "Confusion Matrix – Random Forest (Σενάριο Α)", "cm_A_rf.png")
 
-# ============================================================
+
 # ΒΗΜΑ 4Β: Σενάριο Β – GridSearchCV 3-fold CV
-# ============================================================
+
 print("\n=== Βήμα 4Β: Σενάριο Β - GridSearchCV (3-fold CV) ===")
 cv3 = StratifiedKFold(n_splits=3, shuffle=True, random_state=42)
 
@@ -245,9 +237,8 @@ print(f"  ★ {gs.best_params_} | CV F1: {gs.best_score_:.4f} | Test F1(W): {res
 plot_cm(y_test_B, pred, class_names,
         "Confusion Matrix – Random Forest (Σενάριο Β)", "cm_B_rf.png")
 
-# ============================================================
+
 # ΒΗΜΑ 5: Γράφημα Σύγκρισης
-# ============================================================
 print("\n=== Βήμα 5: Γράφημα Σύγκρισης ===")
 models  = ['Logistic Regression', 'Decision Tree', 'Random Forest']
 metrics = ['Accuracy', 'F1 (Weighted)', 'F1 (Macro)']

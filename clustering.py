@@ -21,9 +21,8 @@ output_dir = os.path.dirname(os.path.abspath(__file__))
 plots_dir  = os.path.join(output_dir, "plots")
 os.makedirs(plots_dir, exist_ok=True)
 
-# ============================================================
+
 # ΒΗΜΑ 1: Φόρτωση & Προεπεξεργασία
-# ============================================================
 print("=== Βήμα 1: Φόρτωση Δεδομένων ===")
 df = pd.read_csv(os.path.join(output_dir, "cleaned_sampled_data.csv"))
 print(f"Dataset: {df.shape[0]:,} γραμμές, {df.shape[1]} στήλες")
@@ -48,8 +47,8 @@ print(f"  Εξηγούμενη Διακύμανση: {pca_vis.explained_variance
 # Χρωματική παλέτα για κλάσεις
 palette_true = sns.color_palette("tab20", len(class_names))
 
+# Αποθήκευση scatter plot PCA με χρωματισμό clusters.
 def save_cluster_plot(X_pca, labels, title, filename, palette=None, legend_labels=None):
-    """Αποθήκευση scatter plot PCA με χρωματισμό clusters."""
     fig, ax = plt.subplots(figsize=(12, 8))
     unique_labels = np.unique(labels)
     if palette is None:
@@ -72,9 +71,8 @@ def save_cluster_plot(X_pca, labels, title, filename, palette=None, legend_label
 save_cluster_plot(X_pca_full, y_true_full, "Πραγματικές Κλάσεις (Ground Truth) - PCA 2D",
                   "clustering_ground_truth.png", palette_true, list(class_names))
 
-# ============================================================
+
 # ΒΗΜΑ 2: K-MEANS (100K δείγματα)
-# ============================================================
 print("\n=== Βήμα 2: K-Means Clustering ===")
 
 # Αριθμός κλάσεων ως αναφορά
@@ -108,7 +106,7 @@ inertias_arr = np.array(inertias, dtype=float)
 k_norm = (k_list - k_list[0]) / (k_list[-1] - k_list[0])
 inertia_norm = (inertias_arr - inertias_arr[-1]) / (inertias_arr[0] - inertias_arr[-1])
 
-# Κάθετη απόσταση κάθε σημείου από τη γραμμή (πρώτο → τελευταίο σημείο)
+# Κάθετη απόσταση κάθε σημείου από τη γραμμή
 line_vec = np.array([k_norm[-1] - k_norm[0], inertia_norm[-1] - inertia_norm[0]])
 distances = []
 for i in range(len(k_list)):
@@ -121,8 +119,7 @@ elbow_k = int(k_list[elbow_idx])
 print(f"\nElbow Point (Kneedle Algorithm): k={elbow_k}")
 
 # Συνδυασμός Elbow + Silhouette:
-# Ο elbow ορίζει το ελάχιστο λογικό k (κάτω από αυτό χάνεται πληροφορία).
-# Από εκεί και πάνω, επιλέγουμε το k με το μέγιστο Silhouette Score.
+
 sil_dict = dict(silhouettes)
 silhouettes_above_elbow = [(k, s) for k, s in silhouettes if k >= elbow_k]
 best_k, best_sil = max(silhouettes_above_elbow, key=lambda x: x[1])
@@ -130,7 +127,7 @@ print(f"Βέλτιστο k (μέγιστο Silhouette για k≥{elbow_k}): k={
 
 sil_at_elbow = sil_dict.get(elbow_k, None)
 
-# ---- Elbow + Silhouette Plot (ενημερωμένο) ----
+#Elbow + Silhouette Plot (ενημερωμένο)
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
 
 # Αριστερό: Elbow Method
@@ -188,8 +185,8 @@ print(f"  Adjusted Rand Index (vs Label): {ari_km:.4f}")
 save_cluster_plot(X_pca_full, km_labels,
                   f"K-Means (k={best_k}) – PCA 2D",
                   "kmeans_pca.png")
+
 # ΒΗΜΑ 3: ΙΕΡΑΡΧΙΚΗ ΟΜΑΔΟΠΟΙΗΣΗ (5K δείγματα)
-# ============================================================
 print("\n=== Βήμα 3: Ιεραρχική Ομαδοποίηση (Hierarchical Clustering) ===")
 HIER_N = 5000
 print(f"Χρήση {HIER_N:,} τυχαίων δειγμάτων (O(N²) μνήμη)")
@@ -258,9 +255,8 @@ dbi_hier_best = hier_results[best_hier_method]['dbi']
 ari_hier_best = hier_results[best_hier_method]['ari']
 hier_labels_best = hier_results[best_hier_method]['labels']
 
-# ============================================================
 # ΒΗΜΑ 4: DBSCAN GRID SEARCH (20K δείγματα)
-# ============================================================
+
 print("\n=== Βήμα 4: DBSCAN Grid Search ===")
 DBSCAN_N = 20000
 print(f"Χρήση {DBSCAN_N:,} τυχαίων δειγμάτων")
@@ -345,9 +341,9 @@ save_cluster_plot(X_pca_db, db_labels_best,
                   f"DBSCAN Βέλτιστο (eps={eps_db_best}, min_samples={min_samples_db_best}, N={DBSCAN_N:,}) – PCA 2D",
                   "dbscan_pca.png")
 
-# ============================================================
+
 # ΒΗΜΑ 5: Συγκριτικό Γράφημα Μετρικών
-# ============================================================
+
 print("\n=== Βήμα 5: Συγκριτικό Γράφημα ===")
 
 algo_names = ['K-Means', f'Hierarchical ({best_hier_method})', 'DBSCAN']

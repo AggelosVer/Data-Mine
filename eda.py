@@ -46,7 +46,7 @@ for f in files:
     df.drop_duplicates(inplace=True)
     
     # Διαχείριση NaN και Inf
-    # Αντικατάσταση Inf με NaN και αφαίρεση
+
     df.replace([np.inf, -np.inf], np.nan, inplace=True)
     df.dropna(inplace=True)
     
